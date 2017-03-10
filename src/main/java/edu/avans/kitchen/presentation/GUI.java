@@ -48,7 +48,7 @@ public class GUI extends JFrame {
 
         JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
         tabbedPane.setBackground(Color.GRAY);
-        tabbedPane.setBounds(0, 0, 1400, 700);
+        tabbedPane.setBounds(0, 0, 1500, 800);
         getContentPane().add(tabbedPane);
 
         JPanel Logintab = new JPanel();

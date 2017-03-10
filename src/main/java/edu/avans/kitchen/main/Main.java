@@ -11,7 +11,7 @@ public class Main {
         gui.setVisible(true);
         gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         gui.setTitle( "Deelsysteem Keuken" );
-        gui.setSize( 1400, 700 );
+        gui.setSize( 1500, 800 );
 
     }
 }

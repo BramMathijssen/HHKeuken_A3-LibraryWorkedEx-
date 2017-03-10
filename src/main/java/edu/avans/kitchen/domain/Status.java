@@ -1,14 +1,18 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package edu.avans.kitchen.domain;
 
 /**
  *
  * @author Bram
  */
-public class Status {
+public enum Status {
+    PLACED("Placed"),
+    ACCEPTED("Accepted"),
+    READY("Ready"),
+    DENIED("Denied");
     
+    private String state;
+    
+    Status(String state) {
+        this.state = state;
+    }
 }
