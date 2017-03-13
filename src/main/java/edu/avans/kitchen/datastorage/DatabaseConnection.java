@@ -4,121 +4,41 @@
  */
 package edu.avans.kitchen.datastorage;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.sql.*;
+import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-/**
- *
- * @author ppthgast
- */
 public class DatabaseConnection {
-
-    private Connection connection;
-
-    // The Statement object has been defined as a field because some methods
-    // may return a ResultSet object. If so, the statement object may not
-    // be closed as you would do when it was a local variable in the query
-    // execution method.
-    private Statement statement;
-
-    public DatabaseConnection() {
-        connection = null;
-        statement = null;
-    }
-
-    public boolean openConnection() {
-        boolean result = false;
-
-        if (connection == null) {
-            try {
-                // Try to create a connection with the library database
-                connection = DriverManager.getConnection(
-                        "jdbc:mysql://localhost/23ivp4a", "root", "");
-
-                if (connection != null) {
-                    statement = connection.createStatement();
-                }
-
-                result = true;
-            } catch (SQLException e) {
-                System.out.println(e);
-                result = false;
-            }
-        } else {
-            // A connection was already initalized.
-            result = true;
-        }
-
-        return result;
-    }
-
-    public boolean connectionIsOpen() {
-        boolean open = false;
-
-        if (connection != null && statement != null) {
-            try {
-                open = !connection.isClosed() && !statement.isClosed();
-            } catch (SQLException e) {
-                System.out.println(e);
-                open = false;
-            }
-        }
-        // Else, at least one the connection or statement fields is null, so
-        // no valid connection.
-
-        return open;
-    }
-
-    public void closeConnection() {
+    //Attributes
+    private String url, user, password;
+    private Connection con;
+    
+    //Constructor which makes a connection with the database
+    public DatabaseConnection(){
         try {
-            statement.close();
-
-            // Close the connection
-            connection.close();
-        } catch (Exception e) {
-            System.out.println(e);
+            Properties prop = new Properties();
+            prop.load(new FileInputStream("src/main/resources/Config.properties"));
+            
+            String ip = prop.getProperty("db_ip");
+            String dbName = prop.getProperty("db_name");
+            
+            //this.url = "jdbc:mysql://" + ip + dbName; EN in config.properties ip = localhost/ dbName = 23ivp4a userName= root password = (leeg)
+            this.url = "jdbc:mysql://" + ip + dbName;
+            this.user = prop.getProperty("db_user");
+            this.password = prop.getProperty("db_pass");
+            
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            con = DriverManager.getConnection(url, user, password);
+        } catch(IOException | ClassNotFoundException | InstantiationException | IllegalAccessException | SQLException e){
+            Logger.getLogger(OrderDAO.class.getName()).log(Level.SEVERE, "SQL Error:", e);
         }
     }
-
-    public ResultSet executeSQLSelectStatement(String query) {
-        ResultSet resultset = null;
-
-        // First, check whether a some query was passed and the connection with
-        // the database.
-        if (query != null && connectionIsOpen()) {
-            // Then, if succeeded, execute the query.
-            try {
-                resultset = statement.executeQuery(query);
-            } catch (SQLException e) {
-                System.out.println(e);
-                resultset = null;
-            }
-        }
-
-        return resultset;
-    }
-
-    /**
-     * Dml: data manipulation language
-     * @param query The SQL query that will be executed
-     * @return true if execution of the SQL statement was successful, false 
-     * otherwise. 
-     */
-    public boolean executeSqlDmlStatement(String query) {
-        boolean result = false;
-
-        // First, check whether a some query was passed and the connection with
-        // the database.
-        if (query != null && connectionIsOpen()) {
-            // Then, if succeeded, execute the query.
-            try {
-                statement.executeUpdate(query);
-                result = true;
-            } catch (SQLException e) {
-                System.out.println(e);
-                result = false;
-            }
-        }
-
-        return result;
+    
+    //Getters
+    public Connection getConnection(){
+        return con;
     }
 }

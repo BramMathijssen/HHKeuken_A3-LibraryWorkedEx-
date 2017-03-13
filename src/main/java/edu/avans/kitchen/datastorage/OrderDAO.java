@@ -5,98 +5,118 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import edu.avans.kitchen.domain.Order;
+import edu.avans.kitchen.domain.Status;
+import java.sql.Connection;
+import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+//Class that executes statements regarding the orders
 public class OrderDAO {
+    //Attributes
+    private final DatabaseConnection dbc;
+    private final Connection con;
+    private static final String SQL = "SQL: ";
+    private static final String MID = "kitchenorderid";
 
+    //Constructor
     public OrderDAO() {
-        // Nothing to be initialized. This is a stateless class. Constructor
-        // has been added to explicitely make this clear.
+        this.dbc = new DatabaseConnection();
+        this.con = dbc.getConnection();
     }
 
-    /**
-     * Tries to find the member identified by the given membership number in the
-     * persistent data store, in this case a MySQL database. All loans and
-     * reservations for the member are loaded as well. In this POC, the reserved
-     * books and/or lend copies of the books are not loaded - it is out of scope
-     * for now.
-     *
-     * @param membershipNumber identifies the member to be loaded from the
-     * database
-     *
-     * @return the Member object to be found. In case member could not be found,
-     * null is returned.
-     */
+    //Methods
     public List<Order> findAcceptedOrders() {
-        Order order = null;
-
-        // First open a database connnection
-        DatabaseConnection connection = new DatabaseConnection();
-        if (connection.openConnection()) {
-            // If a connection was successfully setup, execute the SELECT statement.
-            ResultSet resultset = connection.executeSQLSelectStatement(
-                    "SELECT * FROM member WHERE MembershipNumber = " + membershipNumber + ";");
-
-            if (resultset != null) {
-                try {
-                    // The membershipnumber for a member is unique, so in case the
-                    // resultset does contain data, we need its first entry.
-                    if (resultset.next()) {
-                        int membershipNumberFromDb = resultset.getInt("MembershipNumber");
-                        String firstNameFromDb = resultset.getString("FirstName");
-                        String lastNameFromDb = resultset.getString("LastName");
-
-                        member = new Member(
-                                membershipNumberFromDb,
-                                firstNameFromDb,
-                                lastNameFromDb);
-
-                        member.setStreet(resultset.getString("Street"));
-                        member.setHouseNumber(resultset.getString("HouseNumber"));
-                        member.setCity(resultset.getString("City"));
-                        member.setFine(resultset.getDouble("Fine"));
-                    }
-                } catch (SQLException e) {
-                    System.out.println(e);
-                    member = null;
-                }
-            }
-            // else an error occurred leave 'member' to null.
-
-            // We had a database connection opened. Since we're finished,
-            // we need to close it.
-            connection.closeConnection();
+        List<Order> activeOrders = new ArrayList<>();
+        ResultSet activeRS = null;
+        try {
+            Statement st = con.createStatement();
+            String query = "SELECT * FROM `kitchenorder` WHERE `Status` = `Accepted` ;";
+            activeRS = st.executeQuery(query);
+        } catch (SQLException ex) {
+            Logger.getLogger(OrderDAO.class.getName()).log(Level.SEVERE, SQL, ex);
         }
 
-        return member;
+        try {
+            while (activeRS.next()) {
+                Order order = new Order();
+                order.setTableNr(activeRS.getInt("tableid"));
+                order.setOrderId(activeRS.getInt(MID));
+                order.setMaxCookingTime(activeRS.getInt("cookingtime"));
+                order.setEndTime(activeRS.getLong("endtime"));
+                order.setStatus(Status.ACCEPTED);
+                
+                activeOrders.add(order);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(OrderDAO.class.getName()).log(Level.SEVERE, SQL, ex);
+        }
+        return activeOrders;
     }
 
-    /**
-     * Removes the given member from the database.
-     *
-     * @param memberToBeRemoved an object of the Member class representing the
-     * member to be removed.
-     *
-     * @return true if execution of the SQL-statement was successful, false
-     * otherwise.
-     */
-    public boolean removeMember(Member memberToBeRemoved) {
-        boolean result = false;
-
-        if (memberToBeRemoved != null) {
-            // First open the database connection.
-            DatabaseConnection connection = new DatabaseConnection();
-            if (connection.openConnection()) {
-                // Execute the delete statement using the membership number to
-                // identify the member row.
-                result = connection.executeSqlDmlStatement(
-                        "DELETE FROM member WHERE MembershipNumber = " + memberToBeRemoved.getMembershipNumber() + ";");
-
-                // Finished with the connection, so close it.
-                connection.closeConnection();
-            }
-            // else an error occurred leave 'member' to null.
+    public List<Order> findPlacedOrders() {
+        List<Order> placedOrders = new ArrayList<>();
+        ResultSet placedRS = null;
+        try {
+            Statement st = con.createStatement();
+            String query = "SELECT * FROM `kitchenorder` WHERE `Status` = `Placed` ;";
+            placedRS = st.executeQuery(query);
+        } catch (SQLException ex) {
+            Logger.getLogger(OrderDAO.class.getName()).log(Level.SEVERE, SQL, ex);
         }
+        try {
+            while (placedRS.next()) {
+                Order order = new Order();
+                order.setTableNr(placedRS.getInt("tableid"));
+                order.setOrderId(placedRS.getInt(MID));
+                order.setMaxCookingTime(placedRS.getInt("cookingtime"));
+                order.setStatus(Status.PLACED);
+                
+                placedOrders.add(order);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(OrderDAO.class.getName()).log(Level.SEVERE, SQL, ex);
+        }
+        return placedOrders;
+    }
 
-        return result;
+    public void setActive(int orderId, long endTime) {
+        try {
+            Statement st = con.createStatement();
+            String query = "UPDATE `mealorder` SET status='accepted', `endtime` = " + endTime + " WHERE `mealorderid` = " + orderId + ";";
+            st.executeUpdate(query);
+        } catch (SQLException ex) {
+            Logger.getLogger(OrderDAO.class.getName()).log(Level.SEVERE, SQL, ex);
+        }
+    }
+    
+    public void linkEmployee(int employeeid, int mealid, int mealorderid){
+        try{
+            Statement st = con.createStatement();
+            String query = "UPDATE `mealorder_meal` SET `employeeid` = " + employeeid + " WHERE `mealid` = " + mealid + " AND mealorderid = " + mealorderid + ";";
+            st.executeUpdate(query);
+        } catch(SQLException ex){
+            Logger.getLogger(OrderDAO.class.getName()).log(Level.SEVERE, SQL, ex);
+        }
+    }
+
+    public void setReady(int orderId) {
+        try {
+            Statement st = con.createStatement();
+                String query = "UPDATE `mealorder` SET status='ready' WHERE `mealorderid` = " + orderId + ";";
+            st.executeUpdate(query);
+        } catch (SQLException ex) {
+            Logger.getLogger(OrderDAO.class.getName()).log(Level.SEVERE, SQL, ex);
+        }
+    }
+    
+    public void setDenied(int orderId) {
+        try {
+            Statement st = con.createStatement();
+                String query = "UPDATE `mealorder` SET status='denied' WHERE `mealorderid` = " + orderId + ";";
+            st.executeUpdate(query);
+        } catch (SQLException ex) {
+            Logger.getLogger(OrderDAO.class.getName()).log(Level.SEVERE, SQL, ex);
+        }
     }
 }

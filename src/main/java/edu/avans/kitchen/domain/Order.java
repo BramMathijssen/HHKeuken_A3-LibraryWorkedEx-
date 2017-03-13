@@ -1,8 +1,11 @@
 package edu.avans.kitchen.domain;
 
+import edu.avans.kitchen.generics.Error;
 import java.util.ArrayList;
 import java.util.List;
 import edu.avans.kitchen.domain.Dish;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 /**
  *
  * @author Bram
@@ -81,13 +84,30 @@ public class Order {
         this.endTime = endTime;
     }
 
-    public void setStatus(Status status) {
-        this.status = status;
+    
+    public boolean setStatus(Status status) {
+        boolean b = false;
+        if(getStatus() == status) {
+            Logger.getLogger(Order.class.getName()).log(Level.INFO, Error.STATUS.toString()
+                    .replace(STATE, status.toString())
+                    .replace(REASON, "deze order heeft al de status " + status.toString()));
+        } else if(getStatus() == Status.PLACED && status == Status.READY) {
+            Logger.getLogger(Order.class.getName()).log(Level.INFO, Error.STATUS.toString()
+                    .replace(STATE, status.toString()
+                    .replace(REASON, "een bestelling moet eerst geaccepteerd worden")));
+        } else if(getStatus() == Status.READY && status != Status.READY) {
+            Logger.getLogger(Order.class.getName()).log(Level.INFO, Error.STATUS.toString()
+                    .replace(STATE, status.toString()
+                    .replace(REASON, "de bestelling is al als gereed gemarkeerd")));
+        } else {
+            this.status = status;
+            b = true;
+        }
+        return b;
     }
     
-    //Methoden
-    public void addDish(Dish dish) {
-       dishes.add(dish);
+    //Methods    
+    public void addDish(Dish d) {
+        dishes.add(d);
     }
-    
- }
+}

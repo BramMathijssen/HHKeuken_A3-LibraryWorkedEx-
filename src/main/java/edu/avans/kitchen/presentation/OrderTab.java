@@ -3,18 +3,29 @@ package edu.avans.kitchen.presentation;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.Border;
+import edu.avans.kitchen.businesslogic.OrderManager;
+import edu.avans.kitchen.domain.Order;
+import edu.avans.kitchen.domain.Dish;
+import java.awt.event.ActionEvent;
+import edu.avans.kitchen.businesslogic.OrderManager;
 /**
  *
  * @author Bram
  */
 public class OrderTab extends JPanel {
     
+    //References to other classes
+    private Order order;
+    private OrderManager om;
+
+    //Attributen
     private JTable tableAccepted, tablePlaced;
     private String[][] acceptedOrders, placedOrders;
     private JButton acceptOrderButton,showOrderDetailsButton;
     
-    //private static final String[] COL_NAMES = { "Tafel Nummer", "Order Nummer", "Maximale Bereidingstijd" };
-    //private static final int COL_LENGTH = COL_NAMES.length;
+    //Tabel instellingen
+    private static final String[] COL_NAMES = { "Tafel Nummer", "Order Nummer", "Maximale Bereidingstijd" };
+    private static final int COL_LENGTH = COL_NAMES.length;
     private static final Dimension MIN_DIM = new Dimension(250, 50);
     private static final Border BORDER = BorderFactory.createEmptyBorder(5, 5, 0, 5);
     private static final Dimension MAX_DIM = new Dimension(Frame.MAXIMIZED_VERT,Frame.MAXIMIZED_HORIZ);
@@ -23,6 +34,10 @@ public class OrderTab extends JPanel {
     
     public OrderTab(){
         setLayout (new BorderLayout());
+        
+        //Methoden om de data in de tabel te laden
+        fillAccepted(om);
+        fillPlaced(om);
    
         //testdata om nullpointer error te voorkomen
         String[] columnNames = {"OrderID", "TafelID", "Aantal gerechten" };
@@ -106,6 +121,90 @@ public class OrderTab extends JPanel {
         splitPane.add(orderSplitPane);
         splitPane.add(buttonHalf);
         splitPane.setDividerSize(0);
+        
+        //ActionListner
+        acceptOrderButton.addActionListener((ActionEvent evt) -> {
+           om.acceptOrder(order);
+        });
+        
+        //Methods
+        public void doRefresh(OrderManager om){
+            fillAccepted(om);
+            fillPlaced(om);
+            refreshAccepted();
+            refreshPlaced();
+            resetButton();
+        }
+    
+        public void fillAccepted(OrderManager om){
+            acceptedOrders = new String[om.getAcceptedOrders().size()][COL_LENGTH];
+            int j = 0;
+            for(Order o : om.getAcceptedOrders()){
+                acceptedOrders[j][0] = Integer.toString(o.getTableNr());
+                acceptedOrders[j][1] = Integer.toString(o.getOrderId());
+                acceptedOrders[j][2] = toMinutes(o.getMaxCookingTime());
+                j++; 
+            }
+        }
+    
+        public void refreshAccepted(){
+            NoEditTableModel dtm = new NoEditTableModel(acceptedOrders, COL_NAMES);
+            tableAccepted.setModel(dtm);      
+        }
+
+        public void fillPlaced(OrderManager om){
+            placedOrders = new String[om.getPlacedOrders().size()][COL_LENGTH];
+            int i = 0;
+            for(Order o : om.getPlacedOrders()){
+                placedOrders[i][0] = Integer.toString(o.getTableNr());
+                placedOrders[i][1] = Integer.toString(o.getOrderId());
+                placedOrders[i][2] = toMinutes(o.getMaxCookingTime());
+                i++;
+            }
+        }
+
+        public void refreshPlaced(){
+            NoEditTableModel dtm = new NoEditTableModel(placedOrders, COL_NAMES);
+            tablePlaced.setModel(dtm);        
+        }
+
+        public void resetButton(){
+            showOrderDetailsButton.setEnabled(false);
+        }
+
+        public void showAcceptedOrder(OrderManager om, DishManager mm, String acceptedID){
+            for(Order o : om.getAcceptedOrders()){
+                if(Integer.toString(o.getOrderId()).equals(acceptedID)){
+                    for(Meal m : mm.findMeals(Integer.valueOf(acceptedID))){
+                        o.addMeal(m);
+                    }
+                    mf.setPlanningPanel(this, o);
+                }
+            }
+        }
+
+        public void showPlacedOrder(OrderManager om, MealManager mm, MainFrame mf, String placedID){
+            for(Order o : om.getPlacedOrders()){
+                if(Integer.toString(o.getOrderId()).equals(placedID)){
+                    for(Meal m : mm.findMeals(Integer.valueOf(placedID))){
+                        o.addMeal(m);
+                    }
+                    mf.setPlanningPanel(this, o);
+                }
+            }
+        }
+
+        public String toMinutes(int sec){
+            int min = sec * 1000;
+            String nM = Integer.toString((min/60000)%60);
+            String nS = Integer.toString((min/1000)%60);
+            if((nM).length() == 1){
+                nM = "0" + nM;
+            }
+            if((nS).length() == 1){
+                nS = "0" + nS;
+            }
+            return nM + ":" + nS;
 
 }
 }
