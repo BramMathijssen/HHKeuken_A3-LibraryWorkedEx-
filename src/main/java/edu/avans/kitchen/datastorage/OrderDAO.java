@@ -31,7 +31,7 @@ public class OrderDAO {
         ResultSet activeRS = null;
         try {
             Statement st = con.createStatement();
-            String query = "SELECT * FROM `kitchenorder`;";
+            String query = "SELECT * FROM `acceptedorders`;";
             activeRS = st.executeQuery(query);
         } catch (SQLException ex) {
             Logger.getLogger(OrderDAO.class.getName()).log(Level.SEVERE, SQL, ex);
@@ -59,7 +59,7 @@ public class OrderDAO {
         ResultSet placedRS = null;
         try {
             Statement st = con.createStatement();
-            String query = "SELECT * FROM `kitchenorder`;";
+            String query = "SELECT * FROM `placedorders`;";
             placedRS = st.executeQuery(query);
         } catch (SQLException ex) {
             Logger.getLogger(OrderDAO.class.getName()).log(Level.SEVERE, SQL, ex);

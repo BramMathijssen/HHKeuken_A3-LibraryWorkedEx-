@@ -39,9 +39,15 @@ public class GUI extends JFrame {
     private LoginManager loginManager;
     private final OrderManager om;
     private final DishManager dm;
+    private final OrderTab ordertab;
 //    private OrderManager orderManager;
 
-    public GUI() {
+    public GUI(OrderManager om, DishManager dm) {
+        this.om = om;
+        this.dm = dm;
+        
+        ordertab = new OrderTab(this, om, dm);
+        
         getContentPane().setLayout(null);
 
         loginManager = new LoginManager();
@@ -116,7 +122,7 @@ public class GUI extends JFrame {
                 JOptionPane.showMessageDialog(frame,"De inloggegevens zijn niet juist, probeer het opnieuw.");
             } else {
                 loginManager.setLoggedIn(true);
-                tabbedPane.addTab("Bestellingen", new OrderTab());
+                tabbedPane.addTab("Bestellingen", ordertab);
                 tabbedPane.addTab("Toevoegen Gerecht", null, Toevoegen_Gerechttab, null);
                 tabbedPane.addTab("Status", null, StatusTab, null);
                 tabbedPane.addTab("Gerecht toewijzen", null, GerechtTab, null);

@@ -14,7 +14,7 @@ public class Order {
     //Attributes
     private int tableNr, orderId, maxCookingTime;
     private long endTime;
-    private Status status;
+    private Status stat;
     private final List<Dish> dishes;
     private static final String STATE = "%status%";
     private static final String REASON = "%reason%";
@@ -47,7 +47,7 @@ public class Order {
     }
     
     public Status getStatus() {
-        return status;
+        return stat;
     }
     
     //Setters
@@ -84,7 +84,7 @@ public class Order {
                     .replace(STATE, status.toString()
                     .replace(REASON, "de bestelling is al als gereed gemarkeerd")));
         } else {
-            this.status = status;
+            this.stat = status;
             b = true;
         }
         return b;

@@ -33,7 +33,7 @@ public class OrderTab extends JPanel {
     private static final double ORW = 0.5d;
     private static final double SRW = 0.8d;
     
-    public OrderTab() {
+    public OrderTab(GUI gui, OrderManager om, DishManager dm) {
         super(new BorderLayout());
         
         om = new OrderManager();
@@ -138,9 +138,9 @@ public class OrderTab extends JPanel {
         splitPane.setDividerSize(0);
         
         //ActionListner
-        acceptOrderButton.addActionListener((ActionEvent evt) -> {
-           om.acceptOrder(order);
-        });
+//        acceptOrderButton.addActionListener((ActionEvent evt) -> {
+//           om.acceptOrder(order);
+//        });
         
 //        tablePlaced.getSelectionModel().addListSelectionListener(evt -> {
 //            showOrderDetailsButton.setEnabled(true);
