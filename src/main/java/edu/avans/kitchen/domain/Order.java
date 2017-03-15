@@ -24,65 +24,49 @@ public class Order {
         this.dishes = new ArrayList<>();
     }
     
-    //Constructor
-    public Order(int tableNr, int orderId, int maxCookingTime, long endTime, Status status, List<Dish> dishes) {
-        this.tableNr = tableNr;
-        this.orderId = orderId;
-        this.maxCookingTime = maxCookingTime;
-        this.endTime = endTime;
-        this.status = status;
-        this.dishes = dishes;
-    }
     
     //Getters
     public int getTableNr() {
         return tableNr;
     }
-
-    public int getOrderId() {
+    
+    public int getOrderId(){
         return orderId;
     }
-
-    public int getMaxCookingTime() {
-        return maxCookingTime;
-    }
-
-    public long getEndTime() {
+    
+    public long getEndTime(){
         return endTime;
     }
-
-    public Status getStatus() {
-        return status;
+    
+    public int getMaxCookingTime () {
+        return maxCookingTime;
     }
-
-    public List<Dish> getDishes() {
+    
+    public List<Dish> getMeals(){
         return dishes;
     }
-
-    public static String getSTATE() {
-        return STATE;
-    }
-
-    public static String getREASON() {
-        return REASON;
+    
+    public Status getStatus() {
+        return status;
     }
     
     //Setters
     public void setTableNr(int tableNr) {
         this.tableNr = tableNr;
     }
-
-    public void setOrderId(int orderId) {
-        this.orderId = orderId;
+    
+    public void setEndTime(long endTime){
+        this.endTime = endTime;
     }
-
+    
     public void setMaxCookingTime(int maxCookingTime) {
         this.maxCookingTime = maxCookingTime;
     }
-
-    public void setEndTime(long endTime) {
-        this.endTime = endTime;
+    
+    public void setOrderId(int orderId) {
+        this.orderId = orderId;
     }
+    
 
     
     public boolean setStatus(Status status) {

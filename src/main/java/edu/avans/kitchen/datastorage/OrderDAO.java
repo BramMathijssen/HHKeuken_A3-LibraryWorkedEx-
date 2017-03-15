@@ -17,7 +17,7 @@ public class OrderDAO {
     private final DatabaseConnection dbc;
     private final Connection con;
     private static final String SQL = "SQL: ";
-    private static final String MID = "kitchenorderid";
+    private static final String MID = "KitchenOrderId";
 
     //Constructor
     public OrderDAO() {
@@ -31,7 +31,7 @@ public class OrderDAO {
         ResultSet activeRS = null;
         try {
             Statement st = con.createStatement();
-            String query = "SELECT * FROM `kitchenorder` WHERE `Status` = `Accepted` ;";
+            String query = "SELECT * FROM `kitchenorder`;";
             activeRS = st.executeQuery(query);
         } catch (SQLException ex) {
             Logger.getLogger(OrderDAO.class.getName()).log(Level.SEVERE, SQL, ex);
@@ -40,10 +40,10 @@ public class OrderDAO {
         try {
             while (activeRS.next()) {
                 Order order = new Order();
-                order.setTableNr(activeRS.getInt("tableid"));
+                order.setTableNr(activeRS.getInt("TableId"));
                 order.setOrderId(activeRS.getInt(MID));
-                order.setMaxCookingTime(activeRS.getInt("cookingtime"));
-                order.setEndTime(activeRS.getLong("endtime"));
+                order.setMaxCookingTime(activeRS.getInt("CookingTime"));
+                order.setEndTime(activeRS.getLong("endTime"));
                 order.setStatus(Status.ACCEPTED);
                 
                 activeOrders.add(order);
@@ -59,7 +59,7 @@ public class OrderDAO {
         ResultSet placedRS = null;
         try {
             Statement st = con.createStatement();
-            String query = "SELECT * FROM `kitchenorder` WHERE `Status` = `Placed` ;";
+            String query = "SELECT * FROM `kitchenorder`;";
             placedRS = st.executeQuery(query);
         } catch (SQLException ex) {
             Logger.getLogger(OrderDAO.class.getName()).log(Level.SEVERE, SQL, ex);
@@ -67,9 +67,9 @@ public class OrderDAO {
         try {
             while (placedRS.next()) {
                 Order order = new Order();
-                order.setTableNr(placedRS.getInt("tableid"));
+                order.setTableNr(placedRS.getInt("TableId"));
                 order.setOrderId(placedRS.getInt(MID));
-                order.setMaxCookingTime(placedRS.getInt("cookingtime"));
+                order.setMaxCookingTime(placedRS.getInt("CookingTime"));
                 order.setStatus(Status.PLACED);
                 
                 placedOrders.add(order);
@@ -83,17 +83,17 @@ public class OrderDAO {
     public void setActive(int orderId, long endTime) {
         try {
             Statement st = con.createStatement();
-            String query = "UPDATE `mealorder` SET status='accepted', `endtime` = " + endTime + " WHERE `mealorderid` = " + orderId + ";";
+            String query = "UPDATE `kitchenorder` SET Status='accepted', `endTime` = " + endTime + " WHERE `KitchenOrderId` = " + orderId + ";";
             st.executeUpdate(query);
         } catch (SQLException ex) {
             Logger.getLogger(OrderDAO.class.getName()).log(Level.SEVERE, SQL, ex);
         }
     }
     
-    public void linkEmployee(int employeeid, int mealid, int mealorderid){
+    public void linkEmployee(int employeeid, int dishId, int mealorderid){
         try{
             Statement st = con.createStatement();
-            String query = "UPDATE `mealorder_meal` SET `employeeid` = " + employeeid + " WHERE `mealid` = " + mealid + " AND mealorderid = " + mealorderid + ";";
+            String query = "UPDATE `kitchenorder_dish` SET `EmployeeId` = " + employeeid + " WHERE `DishId` = " + dishId + " AND mealorderid = " + mealorderid + ";";
             st.executeUpdate(query);
         } catch(SQLException ex){
             Logger.getLogger(OrderDAO.class.getName()).log(Level.SEVERE, SQL, ex);
@@ -103,7 +103,7 @@ public class OrderDAO {
     public void setReady(int orderId) {
         try {
             Statement st = con.createStatement();
-                String query = "UPDATE `mealorder` SET status='ready' WHERE `mealorderid` = " + orderId + ";";
+                String query = "UPDATE `kitchenorder` SET Status='ready' WHERE `KitchenOrderId` = " + orderId + ";";
             st.executeUpdate(query);
         } catch (SQLException ex) {
             Logger.getLogger(OrderDAO.class.getName()).log(Level.SEVERE, SQL, ex);
@@ -113,7 +113,7 @@ public class OrderDAO {
     public void setDenied(int orderId) {
         try {
             Statement st = con.createStatement();
-                String query = "UPDATE `mealorder` SET status='denied' WHERE `mealorderid` = " + orderId + ";";
+                String query = "UPDATE `kitchenorder` SET Status='denied' WHERE `KitchenOrderId` = " + orderId + ";";
             st.executeUpdate(query);
         } catch (SQLException ex) {
             Logger.getLogger(OrderDAO.class.getName()).log(Level.SEVERE, SQL, ex);

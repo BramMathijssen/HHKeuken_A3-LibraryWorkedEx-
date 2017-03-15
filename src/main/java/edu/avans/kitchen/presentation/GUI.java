@@ -1,5 +1,6 @@
 package edu.avans.kitchen.presentation;
 
+import edu.avans.kitchen.businesslogic.DishManager;
 import java.awt.event.ActionEvent;
 import java.awt.FlowLayout;
 import java.awt.Color;
@@ -19,6 +20,7 @@ import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.table.DefaultTableModel;
 import edu.avans.kitchen.businesslogic.LoginManager;
+import edu.avans.kitchen.businesslogic.OrderManager;
 import edu.avans.kitchen.domain.Dish;
 import edu.avans.kitchen.domain.Order;
 import javax.swing.ImageIcon;
@@ -35,12 +37,16 @@ public class GUI extends JFrame {
     private JTextField txtLogin;
     private JPasswordField pwdWachtwoord;
     private LoginManager loginManager;
+    private final OrderManager om;
+    private final DishManager dm;
 //    private OrderManager orderManager;
 
     public GUI() {
         getContentPane().setLayout(null);
 
         loginManager = new LoginManager();
+        om = new OrderManager();
+        dm = new DishManager();
         
         JFrame frame = new JFrame("JOptionPane showMessageDialog login");
 

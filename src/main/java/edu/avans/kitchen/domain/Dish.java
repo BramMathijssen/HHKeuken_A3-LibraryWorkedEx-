@@ -9,7 +9,7 @@ import java.util.List;
 public class Dish {
     //Attributen
     private String dishName;
-    private int mealId, amount, employeeId, cookingTime;
+    private int dishId, amount, employeeId, cookingTime;
     private final List<Ingredient> ingredients;
     
     //Default constructor om de ArrayList van ingredients te initializeren
@@ -18,9 +18,9 @@ public class Dish {
     }
 
     //Misschien fout in de constructor List<Ingredient>
-    public Dish(String dishName, int mealId, int amount, int employeeId, int cookingTime, List<Ingredient> ingredients) {
+    public Dish(String dishName, int dishId, int amount, int employeeId, int cookingTime, List<Ingredient> ingredients) {
         this.dishName = dishName;
-        this.mealId = mealId;
+        this.dishId = dishId;
         this.amount = amount;
         this.employeeId = employeeId;
         this.cookingTime = cookingTime;
@@ -32,8 +32,8 @@ public class Dish {
         return dishName;
     }
 
-    public int getMealId() {
-        return mealId;
+    public int getDishId() {
+        return dishId;
     }
 
     public int getAmount() {
@@ -57,8 +57,8 @@ public class Dish {
         this.dishName = dishName;
     }
 
-    public void setMealId(int mealId) {
-        this.mealId = mealId;
+    public void setDishId(int dishId) {
+        this.dishId = dishId;
     }
 
     public void setAmount(int amount) {

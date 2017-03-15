@@ -62,7 +62,7 @@ public class OrderManager {
         orderDAO.linkEmployee(employeeid, mealid, mealorderid);
     }
     
-    //public void amortIngredient(Ingredient ing){
-      //  ingredientDAO.amortIngredient(ing);
-    //}
+    public void amortIngredient(Ingredient ing){
+        ingredientDAO.amortIngredient(ing);
+    }
 }

@@ -10,6 +10,7 @@ import java.util.logging.Logger;
 import edu.avans.kitchen.datastorage.DatabaseConnection;
 import edu.avans.kitchen.datastorage.IngredientDAO;
 import edu.avans.kitchen.businesslogic.DishManager;
+import edu.avans.kitchen.domain.Ingredient;
 import edu.avans.kitchen.domain.Dish;
 
 public class DishDAO {
@@ -31,11 +32,11 @@ public class DishDAO {
         List<Dish> dishes = new ArrayList<>();
         try {
             Statement st = con.createStatement();
-            String query = " SELECT `meal`.`mealid`, `meal`.`name`, `meal`.`cookingtime`, `mealorder_meal`.`amount`, `mealorder_meal`.`employeeid`\n" +
-            "FROM `meal`\n" +
-            "JOIN `mealorder_meal`\n" +
-            "ON `mealorder_meal`.`mealid` = `meal`.`mealid`\n" +
-            "AND `mealorder_meal`.`mealorderid` = " + orderId + " ORDER BY meal.cookingtime DESC;"; 
+            String query = " SELECT `dish`.`DishId`, `dish`.`DishName`, `dish`.`CookingTime`, `kitchenorder_dish`.`Quantity`, `kitchenorder_dish`.`EmployeeId`\n" +
+            "FROM `dish`\n" +
+            "JOIN `kitchenorder_dish`\n" +
+            "ON `kitchenorder_dish`.`DishId` = `dish`.`DishId`\n" +
+            "AND `kitchenorder_dish`.`KitchenOrderId` = " + orderId + " ORDER BY dish.CookingTime DESC;"; 
             dishRS = st.executeQuery(query);
         } catch (Exception e) {
             Logger.getLogger(OrderDAO.class.getName()).log(Level.SEVERE, "SQL Error:", e);
@@ -45,14 +46,14 @@ public class DishDAO {
             List<Ingredient> tempIngredient;
             while (dishRS.next()) {
                 Dish dish = new Dish();
-                dish.setMealId(dishRS.getInt("mealid"));
-                dish.setDishName(dishRS.getString("name"));
-                dish.setCookingTime(dishRS.getInt("cookingtime"));
-                dish.setAmount(dishRS.getInt("amount"));
-                dish.setEmployeeId(dishRS.getInt("employeeid"));
+                dish.setDishId(dishRS.getInt("DishId"));
+                dish.setDishName(dishRS.getString("DishName"));
+                dish.setCookingTime(dishRS.getInt("CookingTime"));
+                dish.setAmount(dishRS.getInt("Quantity"));
+                dish.setEmployeeId(dishRS.getInt("EmployeeId"));
                 dishes.add(dish);
                 
-                tempIngredient = iDAO.getIngredients(dishRS.getInt("mealid"));
+                tempIngredient = iDAO.getIngredients(dishRS.getInt("DishId"));
                 for(Ingredient ing : tempIngredient){
                     dish.addIngredient(ing);
                 }

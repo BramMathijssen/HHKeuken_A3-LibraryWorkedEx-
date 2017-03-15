@@ -8,6 +8,7 @@ import edu.avans.kitchen.domain.Order;
 import edu.avans.kitchen.domain.Dish;
 import java.awt.event.ActionEvent;
 import edu.avans.kitchen.businesslogic.OrderManager;
+import edu.avans.kitchen.businesslogic.DishManager;
 /**
  *
  * @author Bram
@@ -17,7 +18,7 @@ public class OrderTab extends JPanel {
     //References to other classes
     private Order order;
     private OrderManager om;
-
+    
     //Attributen
     private JTable tableAccepted, tablePlaced;
     private String[][] acceptedOrders, placedOrders;
@@ -32,39 +33,53 @@ public class OrderTab extends JPanel {
     private static final double ORW = 0.5d;
     private static final double SRW = 0.8d;
     
-    public OrderTab(){
-        setLayout (new BorderLayout());
+    public OrderTab() {
+        super(new BorderLayout());
+        
+        om = new OrderManager();
         
         //Methoden om de data in de tabel te laden
         fillAccepted(om);
         fillPlaced(om);
    
         //testdata om nullpointer error te voorkomen
-        String[] columnNames = {"OrderID", "TafelID", "Aantal gerechten" };
-        
-        Object[][] data = {
-            {"1", "6", "4" },
-            {"2", "3" , "8"},
-            {"3", "1" , "1"},
-        };
-        
-        Object[][] data2 = {
-            {"4", "2", "2" },
-            {"5", "7" , "3"},
-            {"6", "8" , "1"},
-        };
+//        String[] columnNames = {"OrderID", "TafelID", "Aantal gerechten" };
+//        
+//        Object[][] data = {
+//            {"1", "6", "4" },
+//            {"2", "3" , "8"},
+//            {"3", "1" , "1"},
+//        };
+//        
+//        Object[][] data2 = {
+//            {"4", "2", "2" },
+//            {"5", "7" , "3"},
+//            {"6", "8" , "1"},
+//        };
        
 
         //De tabel van geplaatste orders
-        tablePlaced = new JTable(data,columnNames);
-    
-        JScrollPane tablePlacedScroll= new JScrollPane(tablePlaced);
+        tableAccepted = new JTable(new NoEditTableModel(acceptedOrders, COL_NAMES));
+        tableAccepted.setDragEnabled(false);
+        tableAccepted.setRowSelectionAllowed(true);
         
-        
-        //De tabel van geaccepteerde orders
-        tableAccepted = new JTable(data2,columnNames);
+        ListSelectionModel tableAcceptedSM = tableAccepted.getSelectionModel();
+        tableAcceptedSM.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        tableAccepted.setSelectionModel(tableAcceptedSM);
         
         JScrollPane tableAcceptedScroll = new JScrollPane(tableAccepted);
+        
+        
+        //Instellen van de placed orders tabel
+        tablePlaced = new JTable(new NoEditTableModel(placedOrders, COL_NAMES));
+        tablePlaced.setDragEnabled(false);
+        tablePlaced.setRowSelectionAllowed(true);
+        
+        ListSelectionModel tablePlacedSM = tablePlaced.getSelectionModel();
+        tablePlacedSM.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        tablePlaced.setSelectionModel(tablePlacedSM);
+        
+        JScrollPane tablePlacedScroll = new JScrollPane(tablePlaced);
         
         
         //De layout
@@ -127,6 +142,18 @@ public class OrderTab extends JPanel {
            om.acceptOrder(order);
         });
         
+//        tablePlaced.getSelectionModel().addListSelectionListener(evt -> {
+//            showOrderDetailsButton.setEnabled(true);
+//            tableAccepted.getSelectionModel().clearSelection();
+//        });
+//        
+//        tableAccepted.getSelectionModel().addListSelectionListener(evt -> {
+//            showOrderDetailsButton.setEnabled(true);
+//            tablePlaced.getSelectionModel().clearSelection();
+//        });       
+    }
+    
+        
         //Methods
         public void doRefresh(OrderManager om){
             fillAccepted(om);
@@ -172,27 +199,27 @@ public class OrderTab extends JPanel {
             showOrderDetailsButton.setEnabled(false);
         }
 
-        public void showAcceptedOrder(OrderManager om, DishManager mm, String acceptedID){
+        public void showAcceptedOrder(OrderManager om, DishManager dm, String acceptedID){
             for(Order o : om.getAcceptedOrders()){
                 if(Integer.toString(o.getOrderId()).equals(acceptedID)){
-                    for(Meal m : mm.findMeals(Integer.valueOf(acceptedID))){
-                        o.addMeal(m);
+                    for(Dish d : dm.findDishes(Integer.valueOf(acceptedID))){
+                        o.addDish(d);
                     }
-                    mf.setPlanningPanel(this, o);
                 }
             }
         }
 
-        public void showPlacedOrder(OrderManager om, MealManager mm, MainFrame mf, String placedID){
+        public void showPlacedOrder(OrderManager om, DishManager dm, String placedID){
             for(Order o : om.getPlacedOrders()){
                 if(Integer.toString(o.getOrderId()).equals(placedID)){
-                    for(Meal m : mm.findMeals(Integer.valueOf(placedID))){
-                        o.addMeal(m);
+                    for(Dish d : dm.findDishes(Integer.valueOf(placedID))){
+                        o.addDish(d);
                     }
-                    mf.setPlanningPanel(this, o);
                 }
             }
         }
+                    
+                   
 
         public String toMinutes(int sec){
             int min = sec * 1000;
@@ -206,5 +233,5 @@ public class OrderTab extends JPanel {
             }
             return nM + ":" + nS;
 
-}
+    }
 }

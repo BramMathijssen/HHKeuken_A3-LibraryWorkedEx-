@@ -17,8 +17,8 @@ public class DishManager {
     }
     
     //Methods
-    public List<Dish> findDishes(int orderid){
-        tempDishes = dDAO.getDishes(orderid);
+    public List<Dish> findDishes(int orderId){
+        tempDishes = dDAO.getDishes(orderId);
         return tempDishes;
     }
 }
