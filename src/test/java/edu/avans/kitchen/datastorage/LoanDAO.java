@@ -5,7 +5,7 @@
 package edu.avans.kitchen.datastorage;
 
 import java.util.ArrayList;
-import edu.avans.kitchen.domain.Loan;
+//import edu.avans.kitchen.domain.Loan;
 import edu.avans.kitchen.domain.Member;
 import java.util.List;
 
@@ -18,9 +18,9 @@ import java.util.List;
  */
 public class LoanDAO {
 
-    public List<Loan> findLoans(Member member) {
-        System.out.println("LoanDAO.findLoans() stub");
-        return new ArrayList<>();
-    }
+//    public List<Loan> findLoans(Member member) {
+//        System.out.println("LoanDAO.findLoans() stub");
+//        return new ArrayList<>();
+//    }
 
 }

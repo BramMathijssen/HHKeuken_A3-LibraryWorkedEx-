@@ -4,8 +4,8 @@
  */
 package edu.avans.kitchen.businesslogic;
 
-import edu.avans.kitchen.businesslogic.MemberAdminManager;
-import edu.avans.kitchen.businesslogic.MemberAdminManagerImpl;
+//import edu.avans.kitchen.businesslogic.MemberAdminManager;
+//import edu.avans.kitchen.businesslogic.MemberAdminManagerImpl;
 import edu.avans.kitchen.domain.Member;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -29,75 +29,75 @@ import org.junit.Test;
  */
 public class MemberAdminManagerImplTest {
 
-    private MemberAdminManager memberAdminManager;
-    private Member removableMember;
-    private Member nonRemovableMember;
-    private Member problemMember;
-
-    public MemberAdminManagerImplTest() {
-    }
-
-    @BeforeClass
-    public static void setUpClass() {
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
-    }
-
-    @Before
-    public void setUp() {
-        memberAdminManager = new MemberAdminManagerImpl();
-    }
-
-    @After
-    public void tearDown() {
-    }
-
-    @Test
-    public void removeMember_path_1_2_3() {
-        // test preparation
-        // fill members array
-        removableMember = memberAdminManager.findMember(1001);
-        assertTrue(removableMember != null);
-
-        // test execution
-        boolean result = memberAdminManager.removeMember(removableMember);
-
-        // test verification
-        assertTrue("removableMember has been removed", result);
-        assertEquals(null, memberAdminManager.findMember(1001));
-    }
-
-    @Test
-    public void removeMember_path_1_4() {
-        // test preparation
-        // fill members array
-        nonRemovableMember = memberAdminManager.findMember(1000);
-        assertTrue(nonRemovableMember != null);
-
-        // test execution
-        boolean result = memberAdminManager.removeMember(nonRemovableMember);
-
-        // test verification
-        assertFalse("nonRemovableMember has not been removed", result);
-        Member member = memberAdminManager.findMember(1000);
-        assertEquals("Pascal", member.getFirstName());
-    }
-
-    @Test
-    public void removeMember_path_1_2_5() {
-        // test preparation
-        // fill members array
-        problemMember = memberAdminManager.findMember(1002);
-        assertTrue(problemMember != null);
-
-        // test execution
-        boolean result = memberAdminManager.removeMember(problemMember);
-
-        // test verification
-        assertFalse("problemMember has not been removed", result);
-        Member member = memberAdminManager.findMember(1002);
-        assertEquals("Marice", member.getFirstName());
-    }
+//    private MemberAdminManager memberAdminManager;
+//    private Member removableMember;
+//    private Member nonRemovableMember;
+//    private Member problemMember;
+//
+//    public MemberAdminManagerImplTest() {
+//    }
+//
+//    @BeforeClass
+//    public static void setUpClass() {
+//    }
+//
+//    @AfterClass
+//    public static void tearDownClass() {
+//    }
+//
+//    @Before
+//    public void setUp() {
+//        memberAdminManager = new MemberAdminManagerImpl();
+//    }
+//
+//    @After
+//    public void tearDown() {
+//    }
+//
+//    @Test
+//    public void removeMember_path_1_2_3() {
+//        // test preparation
+//        // fill members array
+//        removableMember = memberAdminManager.findMember(1001);
+//        assertTrue(removableMember != null);
+//
+//        // test execution
+//        boolean result = memberAdminManager.removeMember(removableMember);
+//
+//        // test verification
+//        assertTrue("removableMember has been removed", result);
+//        assertEquals(null, memberAdminManager.findMember(1001));
+//    }
+//
+//    @Test
+//    public void removeMember_path_1_4() {
+//        // test preparation
+//        // fill members array
+//        nonRemovableMember = memberAdminManager.findMember(1000);
+//        assertTrue(nonRemovableMember != null);
+//
+//        // test execution
+//        boolean result = memberAdminManager.removeMember(nonRemovableMember);
+//
+//        // test verification
+//        assertFalse("nonRemovableMember has not been removed", result);
+//        Member member = memberAdminManager.findMember(1000);
+//        assertEquals("Pascal", member.getFirstName());
+//    }
+//
+//    @Test
+//    public void removeMember_path_1_2_5() {
+//        // test preparation
+//        // fill members array
+//        problemMember = memberAdminManager.findMember(1002);
+//        assertTrue(problemMember != null);
+//
+//        // test execution
+//        boolean result = memberAdminManager.removeMember(problemMember);
+//
+//        // test verification
+//        assertFalse("problemMember has not been removed", result);
+//        Member member = memberAdminManager.findMember(1002);
+//        assertEquals("Marice", member.getFirstName());
+//    }
 }

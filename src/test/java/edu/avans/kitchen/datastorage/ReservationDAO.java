@@ -6,7 +6,7 @@ package edu.avans.kitchen.datastorage;
 
 import java.util.ArrayList;
 import edu.avans.kitchen.domain.Member;
-import edu.avans.kitchen.domain.Reservation;
+//import edu.avans.kitchen.domain.Reservation;
 import java.util.List;
 
 /**
@@ -16,10 +16,10 @@ import java.util.List;
  * @author Erco
  */
 public class ReservationDAO {
-
-    public List<Reservation> findReservations(Member member) {
-        System.out.println("ReservationDAO.findReservations() stub");
-        return new ArrayList<>();
-    }
+//
+//    public List<Reservation> findReservations(Member member) {
+//        System.out.println("ReservationDAO.findReservations() stub");
+//        return new ArrayList<>();
+//    }
 
 }
