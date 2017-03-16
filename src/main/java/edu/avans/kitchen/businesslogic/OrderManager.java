@@ -58,9 +58,9 @@ public class OrderManager {
         }
     }
     
-    public void linkEmployee(int dishid, int employeeid, int kitchenorderid){
-        orderDAO.linkEmployee(employeeid, dishid, kitchenorderid);
-    }
+//    public void linkEmployee(int dishid, int employeeid, int kitchenorderid){
+//        orderDAO.linkEmployee(employeeid, dishid, kitchenorderid);
+//    }
     
     public void amortIngredient(Ingredient ing){
         ingredientDAO.amortIngredient(ing);

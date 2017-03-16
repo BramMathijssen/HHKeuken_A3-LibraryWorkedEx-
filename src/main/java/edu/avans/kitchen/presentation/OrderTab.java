@@ -15,13 +15,9 @@ import edu.avans.kitchen.businesslogic.DishManager;
  */
 public class OrderTab extends JPanel {
     
-    //References to other classes
-    private Order order;
-    private OrderManager om;
-    
     //Attributen
     private JTable tableAccepted, tablePlaced;
-    private String[][] acceptedOrders, placedOrders;
+    private String[][] aOrders, pOrders;
     private JButton acceptOrderButton,showOrderDetailsButton;
     
     //Tabel instellingen
@@ -36,7 +32,7 @@ public class OrderTab extends JPanel {
     public OrderTab(GUI gui, OrderManager om, DishManager dm) {
         super(new BorderLayout());
         
-        om = new OrderManager();
+
         
         //Methoden om de data in de tabel te laden
         fillAccepted(om);
@@ -59,7 +55,7 @@ public class OrderTab extends JPanel {
        
 
         //De tabel van geplaatste orders
-        tableAccepted = new JTable(new NoEditTableModel(acceptedOrders, COL_NAMES));
+        tableAccepted = new JTable(new NoEditTableModel(aOrders, COL_NAMES));
         tableAccepted.setDragEnabled(false);
         tableAccepted.setRowSelectionAllowed(true);
         
@@ -71,7 +67,7 @@ public class OrderTab extends JPanel {
         
         
         //Instellen van de placed orders tabel
-        tablePlaced = new JTable(new NoEditTableModel(placedOrders, COL_NAMES));
+        tablePlaced = new JTable(new NoEditTableModel(pOrders, COL_NAMES));
         tablePlaced.setDragEnabled(false);
         tablePlaced.setRowSelectionAllowed(true);
         
@@ -121,7 +117,10 @@ public class OrderTab extends JPanel {
         
         acceptOrderButton = new JButton("Accepteer bestelling");
         acceptOrderButton.setEnabled(false);
+        showOrderDetailsButton = new JButton("Inhoud bestelling bekijken");
+        showOrderDetailsButton.setEnabled(false);
         buttonContainer.add(acceptOrderButton);
+        buttonContainer.add(showOrderDetailsButton);
         
         buttonHalf.setBorder(BORDER);
         buttonHalf.add(buttonContainer);
@@ -150,7 +149,33 @@ public class OrderTab extends JPanel {
 //        tableAccepted.getSelectionModel().addListSelectionListener(evt -> {
 //            showOrderDetailsButton.setEnabled(true);
 //            tablePlaced.getSelectionModel().clearSelection();
-//        });       
+//        });   
+
+        //Actionlisteners NUMMER 2 kan verwijderd worden
+        showOrderDetailsButton.addActionListener((ActionEvent event) -> {
+            if(tableAccepted.isRowSelected(tableAccepted.getSelectedRow())){
+                String acceptedID = (String) tableAccepted.getValueAt(tableAccepted.getSelectedRow(), 1);
+                showAcceptedOrder(om, dm, gui, acceptedID);
+            } else {
+                String placedID = (String) tablePlaced.getValueAt(tablePlaced.getSelectedRow(), 1);
+                showPlacedOrder(om, dm, gui, placedID);
+            }            
+        });
+        
+        
+        
+ 
+        
+        tablePlaced.getSelectionModel().addListSelectionListener(evt -> {
+            showOrderDetailsButton.setEnabled(true);
+            tableAccepted.getSelectionModel().clearSelection();
+        });
+        
+        tableAccepted.getSelectionModel().addListSelectionListener(evt -> {
+            showOrderDetailsButton.setEnabled(true);
+            tablePlaced.getSelectionModel().clearSelection();
+        });       
+    
     }
     
         
@@ -164,34 +189,34 @@ public class OrderTab extends JPanel {
         }
     
         public void fillAccepted(OrderManager om){
-            acceptedOrders = new String[om.getAcceptedOrders().size()][COL_LENGTH];
+            aOrders = new String[om.getAcceptedOrders().size()][COL_LENGTH];
             int j = 0;
             for(Order o : om.getAcceptedOrders()){
-                acceptedOrders[j][0] = Integer.toString(o.getTableNr());
-                acceptedOrders[j][1] = Integer.toString(o.getOrderId());
-                acceptedOrders[j][2] = toMinutes(o.getMaxCookingTime());
+                aOrders[j][0] = Integer.toString(o.getTableNr());
+                aOrders[j][1] = Integer.toString(o.getOrderId());
+                aOrders[j][2] = toMinutes(o.getMaxCookingTime());
                 j++; 
             }
         }
     
         public void refreshAccepted(){
-            NoEditTableModel dtm = new NoEditTableModel(acceptedOrders, COL_NAMES);
+            NoEditTableModel dtm = new NoEditTableModel(aOrders, COL_NAMES);
             tableAccepted.setModel(dtm);      
         }
 
         public void fillPlaced(OrderManager om){
-            placedOrders = new String[om.getPlacedOrders().size()][COL_LENGTH];
+            pOrders = new String[om.getPlacedOrders().size()][COL_LENGTH];
             int i = 0;
             for(Order o : om.getPlacedOrders()){
-                placedOrders[i][0] = Integer.toString(o.getTableNr());
-                placedOrders[i][1] = Integer.toString(o.getOrderId());
-                placedOrders[i][2] = toMinutes(o.getMaxCookingTime());
+                pOrders[i][0] = Integer.toString(o.getTableNr());
+                pOrders[i][1] = Integer.toString(o.getOrderId());
+                pOrders[i][2] = toMinutes(o.getMaxCookingTime());
                 i++;
             }
         }
 
         public void refreshPlaced(){
-            NoEditTableModel dtm = new NoEditTableModel(placedOrders, COL_NAMES);
+            NoEditTableModel dtm = new NoEditTableModel(pOrders, COL_NAMES);
             tablePlaced.setModel(dtm);        
         }
 
@@ -199,7 +224,7 @@ public class OrderTab extends JPanel {
             showOrderDetailsButton.setEnabled(false);
         }
 
-        public void showAcceptedOrder(OrderManager om, DishManager dm, String acceptedID){
+        public void showAcceptedOrder(OrderManager om, DishManager dm, GUI gui, String acceptedID){
             for(Order o : om.getAcceptedOrders()){
                 if(Integer.toString(o.getOrderId()).equals(acceptedID)){
                     for(Dish d : dm.findDishes(Integer.valueOf(acceptedID))){
@@ -209,7 +234,7 @@ public class OrderTab extends JPanel {
             }
         }
 
-        public void showPlacedOrder(OrderManager om, DishManager dm, String placedID){
+        public void showPlacedOrder(OrderManager om, DishManager dm, GUI gui, String placedID){
             for(Order o : om.getPlacedOrders()){
                 if(Integer.toString(o.getOrderId()).equals(placedID)){
                     for(Dish d : dm.findDishes(Integer.valueOf(placedID))){

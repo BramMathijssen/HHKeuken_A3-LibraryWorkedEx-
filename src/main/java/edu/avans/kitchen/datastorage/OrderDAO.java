@@ -90,15 +90,15 @@ public class OrderDAO {
         }
     }
     
-    public void linkEmployee(int employeeid, int dishId, int mealorderid){
-        try{
-            Statement st = con.createStatement();
-            String query = "UPDATE `kitchenorder_dish` SET `EmployeeId` = " + employeeid + " WHERE `DishId` = " + dishId + " AND mealorderid = " + mealorderid + ";";
-            st.executeUpdate(query);
-        } catch(SQLException ex){
-            Logger.getLogger(OrderDAO.class.getName()).log(Level.SEVERE, SQL, ex);
-        }
-    }
+//    public void linkEmployee(int employeeid, int dishId, int mealorderid){
+//        try{
+//            Statement st = con.createStatement();
+//            String query = "UPDATE `kitchenorder_dish` SET `EmployeeId` = " + employeeid + " WHERE `DishId` = " + dishId + " AND mealorderid = " + mealorderid + ";";
+//            st.executeUpdate(query);
+//        } catch(SQLException ex){
+//            Logger.getLogger(OrderDAO.class.getName()).log(Level.SEVERE, SQL, ex);
+//        }
+//    }
 
     public void setReady(int orderId) {
         try {

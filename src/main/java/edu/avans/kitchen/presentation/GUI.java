@@ -48,7 +48,9 @@ public class GUI extends JFrame {
         
         ordertab = new OrderTab(this, om, dm);
         
-        getContentPane().setLayout(null);
+        
+        
+        
 
         loginManager = new LoginManager();
         om = new OrderManager();
