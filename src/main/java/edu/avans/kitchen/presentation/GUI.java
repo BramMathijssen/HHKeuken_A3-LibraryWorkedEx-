@@ -23,38 +23,42 @@ import edu.avans.kitchen.businesslogic.LoginManager;
 import edu.avans.kitchen.businesslogic.OrderManager;
 import edu.avans.kitchen.domain.Dish;
 import edu.avans.kitchen.domain.Order;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.Timer;
 
 public class GUI extends JFrame {
 
     /**
      * @Author Bram
      */
+    private static final int TIMER_ORDER = 10000;
+    private static final int TIMER_EMPLOYEE = 3600000;
 
     private static final long serialVersionUID = 1L;
     private JTextField txtLogin;
     private JPasswordField pwdWachtwoord;
     private LoginManager loginManager;
     private final OrderManager om;
-    private final DishManager dm;
+    //private final DishManager dm;
     private final OrderTab ordertab;
 //    private OrderManager orderManager;
 
     public GUI(OrderManager om, DishManager dm) {
         this.om = om;
-        this.dm = dm;
+      
         
         ordertab = new OrderTab(this, om, dm);
         
-        
-        
+    
+        refresh();
         
 
         loginManager = new LoginManager();
-        om = new OrderManager();
-        dm = new DishManager();
+
         
         JFrame frame = new JFrame("JOptionPane showMessageDialog login");
 
@@ -147,18 +151,33 @@ public class GUI extends JFrame {
         
 
     }
+    
+    private void refresh(){
+        //Declare and instantiate Timer       
+        Timer t = new Timer(0, (ActionEvent e) -> {
+            Logger.getLogger(GUI.class.getName()).log(Level.INFO, "Refreshing Orders...");
+            //Ordermanager refreshes the lists
+            om.findPlacedOrders();
+            om.findAcceptedOrders();
+            //Summarypanel refresh the arrays and replace the table model
+            ordertab.doRefresh(om);
+        });
+        t.setDelay(TIMER_ORDER);
+        t.start();
+    }
 
-    class BestellingenPanel extends JPanel {
-        
-        JPanel Bestellingentab = new JPanel();
-        private JTextArea orderArea;
-        
-        public BestellingenPanel() {
-            
-            orderArea = new JTextArea();
-            orderArea.setSize(100,100);
-            
-        }
+
+//    class BestellingenPanel extends JPanel {
+//        
+//        JPanel Bestellingentab = new JPanel();
+//        private JTextArea orderArea;
+//        
+//        public BestellingenPanel() {
+//            
+//            orderArea = new JTextArea();
+//            orderArea.setSize(100,100);
+//            
+//        }
 //
 //        private JTextArea orderArea;
 //
@@ -182,4 +201,4 @@ public class GUI extends JFrame {
 //        }
 //    }
 }
-}
+

@@ -43,7 +43,6 @@ public class OrderDAO {
                 order.setTableNr(activeRS.getInt("TableId"));
                 order.setOrderId(activeRS.getInt(MID));
                 order.setMaxCookingTime(activeRS.getInt("CookingTime"));
-                order.setEndTime(activeRS.getLong("endTime"));
                 order.setStatus(Status.ACCEPTED);
                 
                 activeOrders.add(order);

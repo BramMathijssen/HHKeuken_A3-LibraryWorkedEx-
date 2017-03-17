@@ -9,6 +9,8 @@ import edu.avans.kitchen.domain.Dish;
 import java.awt.event.ActionEvent;
 import edu.avans.kitchen.businesslogic.OrderManager;
 import edu.avans.kitchen.businesslogic.DishManager;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 /**
  *
  * @author Bram
@@ -19,6 +21,9 @@ public class OrderTab extends JPanel {
     private JTable tableAccepted, tablePlaced;
     private String[][] aOrders, pOrders;
     private JButton acceptOrderButton,showOrderDetailsButton;
+    private  OrderManager om;
+    private  OrderTab ordertab;
+    private static final int TIMER_ORDER = 10000;
     
     //Tabel instellingen
     private static final String[] COL_NAMES = { "Tafel Nummer", "Order Nummer", "Maximale Bereidingstijd" };
@@ -35,8 +40,12 @@ public class OrderTab extends JPanel {
 
         
         //Methoden om de data in de tabel te laden
+        
+        
         fillAccepted(om);
         fillPlaced(om);
+        
+        refresh();
    
         //testdata om nullpointer error te voorkomen
 //        String[] columnNames = {"OrderID", "TafelID", "Aantal gerechten" };
@@ -174,12 +183,27 @@ public class OrderTab extends JPanel {
         tableAccepted.getSelectionModel().addListSelectionListener(evt -> {
             showOrderDetailsButton.setEnabled(true);
             tablePlaced.getSelectionModel().clearSelection();
-        });       
+        });     
+        
     
     }
     
         
         //Methods
+    
+        public void refresh(){
+        //Declare and instantiate Timer       
+        Timer t = new Timer(0, (ActionEvent e) -> {
+            Logger.getLogger(GUI.class.getName()).log(Level.INFO, "Refreshing Orders...");
+            //Ordermanager refreshes the lists
+            om.findPlacedOrders();
+            om.findAcceptedOrders();
+            //Summarypanel refresh the arrays and replace the table model
+            ordertab.doRefresh(om);
+        });
+        t.setDelay(TIMER_ORDER);
+        t.start();
+    }
         public void doRefresh(OrderManager om){
             fillAccepted(om);
             fillPlaced(om);
