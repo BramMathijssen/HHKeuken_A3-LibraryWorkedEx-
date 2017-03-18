@@ -23,6 +23,7 @@ public class OrderTab extends JPanel {
     private JButton acceptOrderButton,showOrderDetailsButton;
     private  OrderManager om;
     private  OrderTab ordertab;
+    private Order order;
     private static final int TIMER_ORDER = 10000;
     
     //Tabel instellingen
@@ -144,6 +145,26 @@ public class OrderTab extends JPanel {
         splitPane.add(orderSplitPane);
         splitPane.add(buttonHalf);
         splitPane.setDividerSize(0);
+        
+        
+        //ActionListners
+//        acceptOrderButton.addActionListener((ActionEvent event) -> {
+//            if(tablePlaced.isRowSelected(tablePlaced.getSelectedRow())){
+//                String placedID = (String) tablePlaced.getValueAt(tablePlaced.getSelectedRow(), 1);
+//                om.acceptOrder(order);
+//            }            
+//        });
+//        
+        
+        
+        tablePlaced.getSelectionModel().addListSelectionListener(evt -> {
+            acceptOrderButton.setEnabled(true);
+            tableAccepted.getSelectionModel().clearSelection();
+        });
+          
+        acceptOrderButton.addActionListener((ActionEvent evt) -> {
+            om.acceptOrder(order);            
+        });
         
         //ActionListner
 //        acceptOrderButton.addActionListener((ActionEvent evt) -> {

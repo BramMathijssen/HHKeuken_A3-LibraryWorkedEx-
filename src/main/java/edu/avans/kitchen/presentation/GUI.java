@@ -146,9 +146,6 @@ public class GUI extends JFrame {
         Toevoegen_Gerechttab.setEnabled(false);
         StatusTab.setEnabled(false);
         GerechtTab.setEnabled(false);
-        
-        
-        
 
     }
     

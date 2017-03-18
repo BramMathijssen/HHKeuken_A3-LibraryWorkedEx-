@@ -18,6 +18,8 @@ public class OrderDAO {
     private final Connection con;
     private static final String SQL = "SQL: ";
     private static final String MID = "KitchenOrderId";
+    private final String AcceptedString = "Accepted";
+    private final String PlacedString = "Placed";
 
     //Constructor
     public OrderDAO() {
@@ -31,7 +33,7 @@ public class OrderDAO {
         ResultSet activeRS = null;
         try {
             Statement st = con.createStatement();
-            String query = "SELECT * FROM `acceptedorders`;";
+            String query = "SELECT * FROM `kitchenorder` WHERE Status = 'Accepted' ;";
             activeRS = st.executeQuery(query);
         } catch (SQLException ex) {
             Logger.getLogger(OrderDAO.class.getName()).log(Level.SEVERE, SQL, ex);
@@ -58,7 +60,7 @@ public class OrderDAO {
         ResultSet placedRS = null;
         try {
             Statement st = con.createStatement();
-            String query = "SELECT * FROM `placedorders`;";
+            String query = "SELECT * FROM `kitchenorder` WHERE Status = 'Placed' ;";
             placedRS = st.executeQuery(query);
         } catch (SQLException ex) {
             Logger.getLogger(OrderDAO.class.getName()).log(Level.SEVERE, SQL, ex);
@@ -79,10 +81,10 @@ public class OrderDAO {
         return placedOrders;
     }
 
-    public void setActive(int orderId, long endTime) {
+    public void setActive(int orderId) {
         try {
             Statement st = con.createStatement();
-            String query = "UPDATE `kitchenorder` SET Status='accepted', `endTime` = " + endTime + " WHERE `KitchenOrderId` = " + orderId + ";";
+            String query = "UPDATE `kitchenorder` SET Status='Accepted' WHERE `KitchenOrderId` = " + orderId + ";";
             st.executeUpdate(query);
         } catch (SQLException ex) {
             Logger.getLogger(OrderDAO.class.getName()).log(Level.SEVERE, SQL, ex);

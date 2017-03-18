@@ -48,7 +48,7 @@ public class OrderManager {
 
     public void acceptOrder(Order o) {
         if(o.setStatus(Status.ACCEPTED)){
-            orderDAO.setActive(o.getOrderId(), o.getEndTime());
+            orderDAO.setActive(o.getOrderId());
         }
     }
     
