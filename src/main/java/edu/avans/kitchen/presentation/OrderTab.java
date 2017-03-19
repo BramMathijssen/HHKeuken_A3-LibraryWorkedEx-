@@ -46,7 +46,6 @@ public class OrderTab extends JPanel {
         fillAccepted(om);
         fillPlaced(om);
         
-        refresh();
    
         //testdata om nullpointer error te voorkomen
 //        String[] columnNames = {"OrderID", "TafelID", "Aantal gerechten" };
@@ -148,13 +147,13 @@ public class OrderTab extends JPanel {
         
         
         //ActionListners
-//        acceptOrderButton.addActionListener((ActionEvent event) -> {
-//            if(tablePlaced.isRowSelected(tablePlaced.getSelectedRow())){
-//                String placedID = (String) tablePlaced.getValueAt(tablePlaced.getSelectedRow(), 1);
-//                om.acceptOrder(order);
-//            }            
-//        });
-//        
+        acceptOrderButton.addActionListener((ActionEvent event) -> {
+            tablePlaced.isRowSelected(tablePlaced.getSelectedRow());
+                String placedID = (String) tablePlaced.getValueAt(tablePlaced.getSelectedRow(), 1);
+                 om.acceptOrder(order, placedID);  
+                      
+        });
+        
         
         
         tablePlaced.getSelectionModel().addListSelectionListener(evt -> {
@@ -162,9 +161,9 @@ public class OrderTab extends JPanel {
             tableAccepted.getSelectionModel().clearSelection();
         });
           
-        acceptOrderButton.addActionListener((ActionEvent evt) -> {
-            om.acceptOrder(order);            
-        });
+//        acceptOrderButton.addActionListener((ActionEvent evt) -> {
+//            om.acceptOrder(order);            
+//        });
         
         //ActionListner
 //        acceptOrderButton.addActionListener((ActionEvent evt) -> {

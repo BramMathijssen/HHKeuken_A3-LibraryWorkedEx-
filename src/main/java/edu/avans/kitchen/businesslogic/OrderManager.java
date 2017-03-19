@@ -46,7 +46,7 @@ public class OrderManager {
         }
     }
 
-    public void acceptOrder(Order o) {
+    public void acceptOrder(Order o , String placedID) {
         if(o.setStatus(Status.ACCEPTED)){
             orderDAO.setActive(o.getOrderId());
         }

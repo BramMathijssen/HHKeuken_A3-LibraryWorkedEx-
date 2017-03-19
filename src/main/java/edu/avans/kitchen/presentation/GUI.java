@@ -45,6 +45,7 @@ public class GUI extends JFrame {
     private final OrderManager om;
     //private final DishManager dm;
     private final OrderTab ordertab;
+    private JTabbedPane tabbedPane;
 //    private OrderManager orderManager;
 
     public GUI(OrderManager om, DishManager dm) {
@@ -102,10 +103,10 @@ public class GUI extends JFrame {
         OrderTab.setVisible(false);
 
         //Toevoegen van een gerecht
-        JPanel Toevoegen_Gerechttab = new JPanel();
-        Toevoegen_Gerechttab.setBackground(Color.GRAY);
-        Toevoegen_Gerechttab.setLayout(null);
-        Toevoegen_Gerechttab.setVisible(false);
+        JPanel OrderDetailsTab = new JPanel();
+        OrderDetailsTab.setBackground(Color.GRAY);
+        OrderDetailsTab.setLayout(null);
+        OrderDetailsTab.setVisible(false);
 
         //Status
         JPanel StatusTab = new JPanel();
@@ -129,9 +130,8 @@ public class GUI extends JFrame {
             } else {
                 loginManager.setLoggedIn(true);
                 tabbedPane.addTab("Bestellingen", ordertab);
-                tabbedPane.addTab("Toevoegen Gerecht", null, Toevoegen_Gerechttab, null);
-                tabbedPane.addTab("Status", null, StatusTab, null);
-                tabbedPane.addTab("Gerecht toewijzen", null, GerechtTab, null);
+                tabbedPane.addTab("Order Details", null, OrderDetailsTab, null);
+                tabbedPane.addTab("Medewerkers beheren", null, StatusTab, null);
                 tabbedPane.setSelectedIndex(1);
             }
         });
@@ -143,10 +143,14 @@ public class GUI extends JFrame {
          */
         Logintab.setEnabled(true);
         OrderTab.setEnabled(false);
-        Toevoegen_Gerechttab.setEnabled(false);
+        OrderDetailsTab.setEnabled(false);
         StatusTab.setEnabled(false);
         GerechtTab.setEnabled(false);
 
+    }
+    
+    public void setTab(int index){
+        tabbedPane.setSelectedIndex(index);
     }
     
     private void refresh(){
