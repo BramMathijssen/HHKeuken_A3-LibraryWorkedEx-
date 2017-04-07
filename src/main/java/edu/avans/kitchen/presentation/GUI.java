@@ -21,6 +21,7 @@ import javax.swing.JTextArea;
 import javax.swing.table.DefaultTableModel;
 import edu.avans.kitchen.businesslogic.LoginManager;
 import edu.avans.kitchen.businesslogic.OrderManager;
+import edu.avans.kitchen.businesslogic.EmployeeManager;
 import edu.avans.kitchen.domain.Dish;
 import edu.avans.kitchen.domain.Order;
 import java.util.logging.Level;
@@ -44,8 +45,12 @@ public class GUI extends JFrame {
     private LoginManager loginManager;
     private final OrderManager om;
     //private final DishManager dm;
-    private final OrderTab ordertab;
-    private JTabbedPane tabbedPane;
+    private final OrderTab ordertab, ordertab2;
+    private OrderDetailsTab orderdetailstab;
+    private OrderDetailsTab2 orderdetailstab2;
+    private EmployeeTab employeetab;
+    public JTabbedPane tabbedPane;
+    private EmployeeManager pm;
 //    private OrderManager orderManager;
 
     public GUI(OrderManager om, DishManager dm) {
@@ -53,6 +58,10 @@ public class GUI extends JFrame {
       
         
         ordertab = new OrderTab(this, om, dm);
+        ordertab2 = new OrderTab(this, om, dm);
+        orderdetailstab = new OrderDetailsTab(this, om);
+        orderdetailstab2 = new OrderDetailsTab2(this, om);
+        //employeetab = new EmployeeTab(this, pm);
         
     
         refresh();
@@ -129,9 +138,13 @@ public class GUI extends JFrame {
                 JOptionPane.showMessageDialog(frame,"De inloggegevens zijn niet juist, probeer het opnieuw.");
             } else {
                 loginManager.setLoggedIn(true);
+                //tabbedPane.addTab("Order Details", orderdetailstab);
                 tabbedPane.addTab("Bestellingen", ordertab);
-                tabbedPane.addTab("Order Details", null, OrderDetailsTab, null);
-                tabbedPane.addTab("Medewerkers beheren", null, StatusTab, null);
+                tabbedPane.addTab("Test", orderdetailstab2);
+                
+                //tabbedPane.addTab("Order Details", orderdetailstab);
+                //tabbedPane.addTab("Medewerkers beheren", null, StatusTab, null);
+                //tabbedPane.addTab("Medewerkers beheren", employeetab);
                 tabbedPane.setSelectedIndex(1);
             }
         });
@@ -149,8 +162,22 @@ public class GUI extends JFrame {
 
     }
     
-    public void setTab(int index){
-        tabbedPane.setSelectedIndex(index);
+    //Methode om van buiten de gui klassen en tab in te stellen
+    public void setOrderTab(JPanel panel){
+        tabbedPane.setSelectedIndex(1);
+    }
+    
+    public void setOrderDetailsTab(JPanel panel, Order o){
+        //tabbedPane.setSelectedIndex(2);
+        orderdetailstab2.setOrder(o, pm);
+    }
+    
+    public void setEmployeeTab(){
+        tabbedPane.setSelectedIndex(0);
+    }
+    
+    public void setFinishedOrdersTab(){
+        tabbedPane.setSelectedIndex(4);
     }
     
     private void refresh(){

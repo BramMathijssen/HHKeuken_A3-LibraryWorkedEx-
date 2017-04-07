@@ -1,11 +1,15 @@
-
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package edu.avans.kitchen.domain;
 
 /**
  *
  * @author Bram
  */
-public enum PartOfDay {
+public enum Daypart {
     MORNING("OCHTEND"),
     AFTERNOON("MIDDAG"),
     EVENING("AVOND");
@@ -14,7 +18,7 @@ public enum PartOfDay {
     private String daypartString;
     
     //Methods
-    PartOfDay(String daypart) {
+    Daypart(String daypart) {
         this.daypartString = daypart;
     }
         

@@ -3,6 +3,9 @@ package edu.avans.kitchen.domain;
 
 import edu.avans.kitchen.domain.Availability;
 import edu.avans.kitchen.domain.PartOfDay;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import edu.avans.kitchen.generics.Error;
 /**
  *
  * @author Bram
@@ -11,17 +14,20 @@ public class Employee {
     
     private int employeeId;
     private String employeeName;
-    private Availability presence;
-    private PartOfDay partOfDay;
+    private Presence presence;
+    private Daypart daypart;
 
     //Constructor
-    public Employee(int employeeId, String employeeName, Availability presence, PartOfDay partOfDay) {
+    public Employee(int employeeId, Presence presence, Daypart daypart) {
         this.employeeId = employeeId;
-        this.employeeName = employeeName;
         this.presence = presence;
-        this.partOfDay = partOfDay;
+        this.daypart = daypart;
     }
     
+    
+    public Employee() {
+        
+    }
     //Getters
     public int getEmployeeId() {
         return employeeId;
@@ -31,12 +37,12 @@ public class Employee {
         return employeeName;
     }
 
-    public Availability getPresence() {
+    public Presence getPresence() {
         return presence;
     }
 
-    public PartOfDay getPartOfDay() {
-        return partOfDay;
+    public Daypart getDaypart() {
+        return daypart;
     }
 
     //Setters
@@ -48,12 +54,19 @@ public class Employee {
         this.employeeName = employeeName;
     }
 
-    public void setPresence(Availability presence) {
-        this.presence = presence;
+    public boolean setPresence(Presence presence) {
+        boolean pres = false;
+        if(getPresence() == presence) {
+            Logger.getLogger(Employee.class.getName()).log(Level.SEVERE, Error.PRESENCE.toString().replace("%presence%", presence.toString()));
+        } else {
+            this.presence = presence;
+            pres = true;
+        }
+        return pres;
     }
 
-    public void setPartOfDay(PartOfDay partOfDay) {
-        this.partOfDay = partOfDay;
+    public void setDaypart(Daypart daypart) {
+        this.daypart = daypart;
     }
     
     

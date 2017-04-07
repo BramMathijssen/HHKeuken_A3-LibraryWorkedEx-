@@ -10,6 +10,7 @@ import edu.avans.kitchen.domain.Order;
 import edu.avans.kitchen.domain.Status;
 import edu.avans.kitchen.generics.EmployeeLinkException;
 import edu.avans.kitchen.generics.StockException;
+import edu.avans.kitchen.presentation.GUI;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Frame;
@@ -158,36 +159,238 @@ public class OrderDetailsTab extends JPanel {
         splitPane.add(buttonHalf);
         splitPane.setDividerSize(0);
         
+        
+        
         //Actionlisteners
-        showOrderButton.addActionListener((ActionEvent evt) -> gui.setTab(2));
+       // showOrderButton.addActionListener((ActionEvent evt) -> mf.setSummaryPanel(this));
         
         readyOrderButton.addActionListener((ActionEvent evt) -> {
             om.readyOrder(order);
-            mf.setSummaryPanel(this);            
+           // gui.setOrderTab(this);
+           // mf.setSummaryPanel(this);            
         });
         
         denyOrderButton.addActionListener((ActionEvent evt) -> {
            om.denyOrder(order);
-           mf.setSummaryPanel(this);
+          // gui.setOrderTab(this);
+           //mf.setSummaryPanel(this);
         });
         
-        acceptOrderButton.addActionListener((ActionEvent evt) -> {
-            try {
-                checkIngredients();
-                checkLinks();
-                order.setEndTime(endTimeMillis);
-                om.acceptOrder(order);
-                for(int i = 0; i < order.getMeals().size(); i++){
-                    om.linkEmployee(Integer.valueOf(mealDetails[i][3]), Integer.valueOf((String)tablePlanning.getValueAt(i, 1)), order.getOrderId());
-                }
-                doAmortIngredients(om);
-                mf.setSummaryPanel(this);
-            } catch(EmployeeLinkException npe){
-                JOptionPane.showMessageDialog(this, "Kies een medewerker voor elk gerecht.", "Kies medewerker", JOptionPane.ERROR_MESSAGE);
-                Logger.getLogger(PlanningPanel.class.getName()).log(Level.SEVERE, "Not all meals have been linked.", npe);
-            } catch(StockException se){
-                JOptionPane.showMessageDialog(this, "Er zijn niet genoeg ingredienten op voorraad.", "Niet genoeg voorraad", JOptionPane.ERROR_MESSAGE);
-                Logger.getLogger(PlanningPanel.class.getName()).log(Level.SEVERE, "Not enough ingredients to accept.", se);
-            }
-        });
+//        acceptOrderButton.addActionListener((ActionEvent evt) -> {
+//            try {
+//                checkIngredients();
+//                checkLinks();
+//                order.setEndTime(endTimeMillis);
+//                om.acceptOrder(order);
+//                for(int i = 0; i < order.getMeals().size(); i++){
+//                    om.linkEmployee(Integer.valueOf(mealDetails[i][3]), Integer.valueOf((String)tablePlanning.getValueAt(i, 1)), order.getOrderId());
+//                }
+//                doAmortIngredients(om);
+//                //gui.setOrderTab(this);
+//            } catch(EmployeeLinkException npe){
+//                JOptionPane.showMessageDialog(this, "Kies een medewerker voor elk gerecht.", "Kies medewerker", JOptionPane.ERROR_MESSAGE);
+//                Logger.getLogger(OrderDetailsTab.class.getName()).log(Level.SEVERE, "Not all meals have been linked.", npe);
+//            } catch(StockException se){
+//                JOptionPane.showMessageDialog(this, "Er zijn niet genoeg ingredienten op voorraad.", "Niet genoeg voorraad", JOptionPane.ERROR_MESSAGE);
+//                Logger.getLogger(OrderDetailsTab.class.getName()).log(Level.SEVERE, "Not enough ingredients to accept.", se);
+//            }
+//        });
     }
+    
+    //Methods
+//    public void doAmortIngredients(OrderManager om){
+//        for(Ingredient ing : ingredients){
+//            om.amortIngredient(ing);
+//        }
+//    }
+    
+//    public void checkIngredients() throws StockException{
+//        //Check if there are enough ingredients
+//        try {
+//            for(int i = 0; i < ingredients.size(); i++){
+//                if(Integer.valueOf(ingredientDetails[i][1]) > Integer.valueOf(ingredientDetails[i][2])){
+//                    throw new StockException();
+//                }
+//            }
+//        } catch(StockException se){
+//            throw se;
+//        }
+//    }
+    
+//    public void checkLinks() throws EmployeeLinkException {
+//        try {
+//            //Check if meals are linked to employees
+//            for(int i = 0; i < order.getMeals().size(); i++){
+//                if("Kies..".equals(tablePlanning.getValueAt(i, 1))){
+//                    throw new EmployeeLinkException();
+//                }
+//            }
+//        } catch(EmployeeLinkException ele){
+//            throw ele;
+//        }
+//    }
+    
+//    public void setOrder(Order o, EmployeeManager pm){
+//        this.order = o;
+//        setIngredients();
+//        ingredientDetails = new String[ingredients.size()][I_COL_LENGTH];
+//        loopDishes();
+//        //loopEmployees(pm);
+//        int j=0;
+//        for(Ingredient ingredient : ingredients){
+//            ingredientDetails[j][0] = ingredient.getName();
+//            ingredientDetails[j][1] = Integer.toString(ingredient.getAmount());
+//            ingredientDetails[j][2] = Integer.toString(ingredient.getCurrentStock());
+//            j++;
+//        }
+//        if(o.getStatus() == Status.PLACED){
+//            readyOrderButton.setEnabled(false);
+//            acceptOrderButton.setEnabled(true);
+//        } else if(o.getStatus() == Status.ACCEPTED){
+//            acceptOrderButton.setEnabled(false);
+//            denyOrderButton.setEnabled(false);
+//            readyOrderButton.setEnabled(true);
+//        }
+//        refillDetailTables();
+//        if(order.getStatus() == Status.PLACED){
+//            //setupEmployeeColumn(pm);
+//        }
+//    }
+    
+//    public void loopDishes(){
+//        mealDetails = new String[order.getMeals().size()][D_COL_LENGTH];
+//        planningDetails = new String[order.getMeals().size()][P_COL_LENGTH];
+//        int i = 0;
+//        endTime = calculateEndTime();
+//        for(Dish dish : order.getMeals()){
+//            //Fill mealDetails
+//            mealDetails[i][0] = dish.getDishName();
+//            mealDetails[i][1] = Integer.toString(dish.getAmount());
+//            mealDetails[i][2] = toMinutes(dish.getCookingTime());
+//            mealDetails[i][3] = Integer.toString(dish.getDishId());
+//            //Fill planningDetails
+//            if(order.getStatus()==Status.PLACED){
+//                planningDetails[i][0] = dish.getDishName();
+//                planningDetails[i][1] = "Kies..";
+//                planningDetails[i][2] = calculateStartTime(dish.getCookingTime());
+//                planningDetails[i][3] = endTime;
+//            } else {
+//                planningDetails[i][0] = dish.getDishName();
+//                planningDetails[i][1] = Integer.toString(dish.getEmployeeId());
+//                planningDetails[i][2] = calculateStartTime(dish.getCookingTime());
+//                planningDetails[i][3] = toHMS(order.getEndTime());
+//            }         
+//            i++;
+//        }
+//    }
+    
+//    public void loopEmployees(EmployeeManager pm){
+//        employeeDetails = new String[pm.getPresentEmployees().size()][E_COL_LENGTH];
+//        int k = 0;
+//        for(Employee e : pm.getPresentEmployees()){
+//            employeeDetails[k][0] = Integer.toString(e.getEmployeeId());
+//            employeeDetails[k][1] = e.getEmployeeName();
+//            employeeDetails[k][2] = e.getDaypart().getDaypart();
+//            k++;
+//        }
+//    }
+    
+//    public void setupEmployeeColumn(EmployeeManager pm){
+//        JComboBox<String> combo = new JComboBox<>();
+//        for (Employee e : pm.getPresentEmployees()){
+//            combo.addItem(Integer.toString(e.getEmployeeId()));            
+//        }
+//        TableColumn col = tablePlanning.getColumnModel().getColumn(1);
+//        col.setCellEditor(new DefaultCellEditor(combo));      
+//    }   
+//    
+//    public String toHMS(long etm){
+//        String nH = Long.toString(((etm/3600000)%24)+2);
+//        String nM = Long.toString((etm/60000)%60);
+//        String nS = Long.toString((etm/1000)%60);
+//        if((nH).length() == 1){
+//            nH = "0" + nH;
+//        }
+//        if((nM).length() == 1){
+//            nM = "0" + nM;
+//        }
+//        if((nS).length() == 1){
+//            nS = "0" + nS;
+//        }
+//        return nH + ":" + nM + ":" + nS;
+//    }
+    
+//    public String calculateStartTime(int cTime){
+//        if(order.getStatus() == Status.ACCEPTED){
+//            endTimeMillis = order.getEndTime() - (cTime * 1000);
+//        } else {
+//            endTimeMillis = System.currentTimeMillis() + ((longestTime - cTime) * 1000);
+//        }
+//        return toHMS(endTimeMillis);
+//    }
+    
+//    public String calculateEndTime(){
+//        longestTime = 0;
+//        for(Dish dish : order.getMeals()){
+//            if(dish.getCookingTime() > longestTime){
+//                longestTime = dish.getCookingTime();
+//            }
+//        }
+//        long nowMillis = System.currentTimeMillis() + (longestTime * 1000);        
+//        return toHMS(nowMillis);
+//    }
+    
+//    public void refillDetailTables(){
+//        //Meal details table
+//        NoEditTableModel dtm = new NoEditTableModel(mealDetails, D_COL_NAMES);
+//        tableDetails.setModel(dtm);
+//        //Ingredient details table
+//        NoEditTableModel dtm2 = new NoEditTableModel(ingredientDetails, I_COL_NAMES);
+//        tableIngredients.setModel(dtm2);
+//        //Planning details table
+//        if(order.getStatus() == Status.PLACED){
+//            NoEditTableModel dtm3 = new NoEditTableModel(planningDetails, P_COL_NAMES, "placed");
+//            tablePlanning.setModel(dtm3);
+//        } else {
+//            NoEditTableModel dtm3 = new NoEditTableModel(planningDetails, P_COL_NAMES);
+//            tablePlanning.setModel(dtm3);
+//        }
+//        //Employee details table
+//        NoEditTableModel dtm4 = new NoEditTableModel(employeeDetails, E_COL_NAMES);
+//        tableEmployees.setModel(dtm4);
+//    }
+    
+//    public void setIngredients(){
+//        ingredients = new ArrayList<>();
+//        for(Dish d : order.getMeals()){
+//            for(Ingredient in : d.getIngredients()){
+//                boolean check = false;
+//                for(Ingredient ing : ingredients){
+//                    if(in.getName().equals(ing.getName())){
+//                        ing.addAmount(in.getAmount() * d.getAmount());
+//                        check = true;
+//                        break;
+//                    }
+//                }
+//                if(!check){
+//                    Ingredient tempIn = in;
+//                    tempIn.addAmount(in.getAmount()*(d.getAmount()-1));
+//                    ingredients.add(tempIn);
+//                }
+//            }
+//        }
+//    }
+    
+    public String toMinutes(int sec){
+        int min = sec * 1000;
+        String nM = Integer.toString((min/60000)%60);
+        String nS = Integer.toString((min/1000)%60);
+        if((nM).length() == 1){
+            nM = "0" + nM;
+        }
+        if((nS).length() == 1){
+            nS = "0" + nS;
+        }
+        return nM + ":" + nS;
+    }
+}

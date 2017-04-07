@@ -45,8 +45,10 @@ public class OrderManager {
             orderDAO.setReady(o.getOrderId());
         }
     }
+    
+    
 
-    public void acceptOrder(Order o , String placedID) {
+    public void acceptOrder(Order o) {
         if(o.setStatus(Status.ACCEPTED)){
             orderDAO.setActive(o.getOrderId());
         }
@@ -58,9 +60,9 @@ public class OrderManager {
         }
     }
     
-//    public void linkEmployee(int dishid, int employeeid, int kitchenorderid){
-//        orderDAO.linkEmployee(employeeid, dishid, kitchenorderid);
-//    }
+    public void linkEmployee(int dishid, int employeeid, int kitchenorderid){
+        orderDAO.linkEmployee(employeeid, dishid, kitchenorderid);
+    }
     
     public void amortIngredient(Ingredient ing){
         ingredientDAO.amortIngredient(ing);

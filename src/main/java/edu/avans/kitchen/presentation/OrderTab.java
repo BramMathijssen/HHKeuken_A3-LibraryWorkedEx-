@@ -11,6 +11,7 @@ import edu.avans.kitchen.businesslogic.OrderManager;
 import edu.avans.kitchen.businesslogic.DishManager;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import edu.avans.kitchen.presentation.GUI;
 /**
  *
  * @author Bram
@@ -21,9 +22,10 @@ public class OrderTab extends JPanel {
     private JTable tableAccepted, tablePlaced;
     private String[][] aOrders, pOrders;
     private JButton acceptOrderButton,showOrderDetailsButton;
-    private  OrderManager om;
-    private  OrderTab ordertab;
+    private OrderManager om;
+    private OrderTab ordertab;
     private Order order;
+    private GUI gui;
     private static final int TIMER_ORDER = 10000;
     
     //Tabel instellingen
@@ -147,14 +149,31 @@ public class OrderTab extends JPanel {
         
         
         //ActionListners
+//        acceptOrderButton.addActionListener((ActionEvent event) -> {
+//            tablePlaced.isRowSelected(tablePlaced.getSelectedRow());
+//                String placedID = (String) tablePlaced.getValueAt(tablePlaced.getSelectedRow(), 1);
+//                 om.acceptOrder(order, placedID);  
+//                      
+//        });
+
+//        acceptOrderButton.addActionListener((ActionEvent event) -> {
+//            om.AcceptOrder2(order);
+//                      
+//        });
+        
+
+
         acceptOrderButton.addActionListener((ActionEvent event) -> {
-            tablePlaced.isRowSelected(tablePlaced.getSelectedRow());
-                String placedID = (String) tablePlaced.getValueAt(tablePlaced.getSelectedRow(), 1);
-                 om.acceptOrder(order, placedID);  
-                      
+            if(tablePlaced.isRowSelected(tablePlaced.getSelectedRow())){
+                String orderId = (String) tablePlaced.getValueAt(tablePlaced.getSelectedRow(), 0);
+                for(Order o : om.getPlacedOrders()){
+                    if(Integer.toString(o.getOrderId()).equals(orderId)){
+                        om.acceptOrder(o);
+
+                    }
+                }
+            }   
         });
-        
-        
         
         tablePlaced.getSelectionModel().addListSelectionListener(evt -> {
             acceptOrderButton.setEnabled(true);
@@ -180,7 +199,18 @@ public class OrderTab extends JPanel {
 //            tablePlaced.getSelectionModel().clearSelection();
 //        });   
 
-        //Actionlisteners NUMMER 2 kan verwijderd worden
+//        //Actionlisteners NUMMER 2 kan verwijderd worden
+//        showOrderDetailsButton.addActionListener((ActionEvent event) -> {
+//            if(tableAccepted.isRowSelected(tableAccepted.getSelectedRow())){
+//                String acceptedID = (String) tableAccepted.getValueAt(tableAccepted.getSelectedRow(), 1);
+//                showAcceptedOrder(om, dm, gui, acceptedID);
+//            } else {
+//                String placedID = (String) tablePlaced.getValueAt(tablePlaced.getSelectedRow(), 1);
+//                showPlacedOrder(om, dm, gui, placedID);
+//            }            
+//        });
+
+        //Actionlisteners
         showOrderDetailsButton.addActionListener((ActionEvent event) -> {
             if(tableAccepted.isRowSelected(tableAccepted.getSelectedRow())){
                 String acceptedID = (String) tableAccepted.getValueAt(tableAccepted.getSelectedRow(), 1);
@@ -274,6 +304,7 @@ public class OrderTab extends JPanel {
                     for(Dish d : dm.findDishes(Integer.valueOf(acceptedID))){
                         o.addDish(d);
                     }
+                gui.setOrderDetailsTab(this, o);
                 }
             }
         }
@@ -284,6 +315,7 @@ public class OrderTab extends JPanel {
                     for(Dish d : dm.findDishes(Integer.valueOf(placedID))){
                         o.addDish(d);
                     }
+                gui.setOrderDetailsTab(this, o);
                 }
             }
         }
