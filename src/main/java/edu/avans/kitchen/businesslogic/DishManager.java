@@ -4,9 +4,13 @@ import edu.avans.kitchen.datastorage.DishDAO;
 import edu.avans.kitchen.domain.Dish;
 import java.util.ArrayList;
 import java.util.List;
+/**
+ *
+ * @author Bram
+ */
 
 public class DishManager {
-    //Attributes
+    //Attributen
     private List<Dish> tempDishes;
     private DishDAO dDAO;
     
@@ -16,7 +20,7 @@ public class DishManager {
         this.dDAO = new DishDAO();
     }
     
-    //Methods
+    //Methoden
     public List<Dish> findDishes(int orderId){
         tempDishes = dDAO.getDishes(orderId);
         return tempDishes;

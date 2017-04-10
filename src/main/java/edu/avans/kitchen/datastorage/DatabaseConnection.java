@@ -12,11 +12,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class DatabaseConnection {
-    //Attributes
+    //Attributen
     private String url, user, password;
     private Connection con;
     
-    //Constructor which makes a connection with the database
+    //Constructor voor connectie maken met de database
     public DatabaseConnection(){
         try {
             Properties prop = new Properties();

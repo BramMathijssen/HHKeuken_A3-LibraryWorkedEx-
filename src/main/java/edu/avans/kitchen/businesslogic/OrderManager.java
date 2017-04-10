@@ -1,23 +1,23 @@
 package edu.avans.kitchen.businesslogic;
 
-import edu.avans.kitchen.datastorage.IngredientDAO;
 import edu.avans.kitchen.datastorage.OrderDAO;
-import edu.avans.kitchen.domain.Ingredient;
 import edu.avans.kitchen.domain.Order;
 import edu.avans.kitchen.domain.Status;
 import java.util.ArrayList;
 import java.util.List;
+/**
+ *
+ * @author Bram
+ */
 
 public class OrderManager {
-    //Attributes
+    //Attributen
     private final OrderDAO orderDAO;
-    private final IngredientDAO ingredientDAO;
     private List<Order> placedOrders, acceptedOrders;
 
     //Constructor
     public OrderManager() {
         this.orderDAO = new OrderDAO();
-        this.ingredientDAO = new IngredientDAO();
         this.placedOrders = new ArrayList<>();
         this.acceptedOrders = new ArrayList<>();
     }
@@ -31,7 +31,7 @@ public class OrderManager {
         return acceptedOrders;
     }
 
-    //Methods    
+    //Methoden  
     public void findPlacedOrders() {
         this.placedOrders = orderDAO.findPlacedOrders();
     }
@@ -45,8 +45,6 @@ public class OrderManager {
             orderDAO.setReady(o.getOrderId());
         }
     }
-    
-    
 
     public void acceptOrder(Order o) {
         if(o.setStatus(Status.ACCEPTED)){
@@ -60,11 +58,4 @@ public class OrderManager {
         }
     }
     
-    public void linkEmployee(int dishid, int employeeid, int kitchenorderid){
-        orderDAO.linkEmployee(employeeid, dishid, kitchenorderid);
-    }
-    
-    public void amortIngredient(Ingredient ing){
-        ingredientDAO.amortIngredient(ing);
-    }
 }

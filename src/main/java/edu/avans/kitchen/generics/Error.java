@@ -1,8 +1,13 @@
 package edu.avans.kitchen.generics;
 
+/**
+ *
+ * @author Bram
+ */
+
 public enum Error {
-    STATUS("Status kan niet veranderd worden naar %status%, want %reason%!"),
-    PRESENCE("Aanwezigheid kan niet veranderd worden naar %presence%, want hij is al %presence%");
+    STATUS("Status kan niet veranderd worden naar %status%, want %reason%!");
+
     
     private final String errorMessage;
     

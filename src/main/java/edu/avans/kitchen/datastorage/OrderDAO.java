@@ -10,16 +10,18 @@ import java.sql.Connection;
 import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+/**
+ *
+ * @author Bram
+ */
 
-//Class that executes statements regarding the orders
 public class OrderDAO {
     //Attributes
     private final DatabaseConnection dbc;
     private final Connection con;
     private static final String SQL = "SQL: ";
-    private static final String MID = "KitchenOrderId";
-    private final String AcceptedString = "Accepted";
-    private final String PlacedString = "Placed";
+    private static final String KID = "KitchenOrderId";
+
 
     //Constructor
     public OrderDAO() {
@@ -43,7 +45,7 @@ public class OrderDAO {
             while (activeRS.next()) {
                 Order order = new Order();
                 order.setTableNr(activeRS.getInt("TableId"));
-                order.setOrderId(activeRS.getInt(MID));
+                order.setOrderId(activeRS.getInt(KID));
                 order.setMaxCookingTime(activeRS.getInt("CookingTime"));
                 order.setStatus(Status.ACCEPTED);
                 
@@ -69,7 +71,7 @@ public class OrderDAO {
             while (placedRS.next()) {
                 Order order = new Order();
                 order.setTableNr(placedRS.getInt("TableId"));
-                order.setOrderId(placedRS.getInt(MID));
+                order.setOrderId(placedRS.getInt(KID));
                 order.setMaxCookingTime(placedRS.getInt("CookingTime"));
                 order.setStatus(Status.PLACED);
                 

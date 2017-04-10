@@ -21,7 +21,6 @@ import javax.swing.JTextArea;
 import javax.swing.table.DefaultTableModel;
 import edu.avans.kitchen.businesslogic.LoginManager;
 import edu.avans.kitchen.businesslogic.OrderManager;
-import edu.avans.kitchen.businesslogic.EmployeeManager;
 import edu.avans.kitchen.domain.Dish;
 import edu.avans.kitchen.domain.Order;
 import java.util.logging.Level;
@@ -31,48 +30,37 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
 
+/**
+ *
+ * @author Bram
+ */
+
 public class GUI extends JFrame {
 
-    /**
-     * @Author Bram
-     */
     private static final int TIMER_ORDER = 10000;
-    private static final int TIMER_EMPLOYEE = 3600000;
 
     private static final long serialVersionUID = 1L;
     private JTextField txtLogin;
     private JPasswordField pwdWachtwoord;
     private LoginManager loginManager;
     private final OrderManager om;
-    //private final DishManager dm;
-    private final OrderTab ordertab, ordertab2;
+    private final OrderTab ordertab;
     private OrderDetailsTab orderdetailstab;
-    private OrderDetailsTab2 orderdetailstab2;
-    private EmployeeTab employeetab;
     public JTabbedPane tabbedPane;
-    private EmployeeManager pm;
-//    private OrderManager orderManager;
 
     public GUI(OrderManager om, DishManager dm) {
         this.om = om;
-      
-        
+         
         ordertab = new OrderTab(this, om, dm);
-        ordertab2 = new OrderTab(this, om, dm);
         orderdetailstab = new OrderDetailsTab(this, om);
-        orderdetailstab2 = new OrderDetailsTab2(this, om);
-        //employeetab = new EmployeeTab(this, pm);
+        loginManager = new LoginManager();
         
-    
+        //Methode die de bestellingen in de tabel ververst.
         refresh();
         
-
-        loginManager = new LoginManager();
-
-        
+       
         JFrame frame = new JFrame("JOptionPane showMessageDialog login");
 
-//        orderManager = new OrderManager();
 
         JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
         tabbedPane.setBackground(Color.GRAY);
@@ -116,20 +104,7 @@ public class GUI extends JFrame {
         OrderDetailsTab.setBackground(Color.GRAY);
         OrderDetailsTab.setLayout(null);
         OrderDetailsTab.setVisible(false);
-
-        //Status
-        JPanel StatusTab = new JPanel();
-        StatusTab.setBackground(Color.GRAY);
-        StatusTab.setLayout(null);
-        StatusTab.setVisible(false);
-        
-
-        //Gerecht toewijzen
-        JPanel GerechtTab = new JPanel();
-        GerechtTab.setBackground(Color.GRAY);
-        GerechtTab.setLayout(null);
-        GerechtTab.setVisible(false);
-        
+       
         //Login 
         JButton btnLogin = new JButton("Login");
         btnLogin.addActionListener((ActionEvent e) -> {
@@ -138,95 +113,45 @@ public class GUI extends JFrame {
                 JOptionPane.showMessageDialog(frame,"De inloggegevens zijn niet juist, probeer het opnieuw.");
             } else {
                 loginManager.setLoggedIn(true);
-                //tabbedPane.addTab("Order Details", orderdetailstab);
                 tabbedPane.addTab("Bestellingen", ordertab);
-                tabbedPane.addTab("Test", orderdetailstab2);
-                
-                //tabbedPane.addTab("Order Details", orderdetailstab);
-                //tabbedPane.addTab("Medewerkers beheren", null, StatusTab, null);
-                //tabbedPane.addTab("Medewerkers beheren", employeetab);
+                tabbedPane.addTab("Bestelling Details", orderdetailstab);
+
                 tabbedPane.setSelectedIndex(1);
             }
         });
         btnLogin.setBounds(149, 317, 97, 25);
         Logintab.add(btnLogin);
 
-        /*
-		 * Maak het alleen mogelijk om de andere panels (tabbladen) te gebruiken, als een gebruiker correct is ingelogd.
-         */
+        //Maakt het alleen mogelijk om de andere panels (tabbladen) te gebruiken, als een gebruiker correct is ingelogd.
         Logintab.setEnabled(true);
         OrderTab.setEnabled(false);
         OrderDetailsTab.setEnabled(false);
-        StatusTab.setEnabled(false);
-        GerechtTab.setEnabled(false);
 
     }
     
-    //Methode om van buiten de gui klassen en tab in te stellen
-    public void setOrderTab(JPanel panel){
-        tabbedPane.setSelectedIndex(1);
-    }
-    
-    public void setOrderDetailsTab(JPanel panel, Order o){
-        //tabbedPane.setSelectedIndex(2);
-        orderdetailstab2.setOrder(o, pm);
-    }
-    
-    public void setEmployeeTab(){
-        tabbedPane.setSelectedIndex(0);
-    }
-    
-    public void setFinishedOrdersTab(){
-        tabbedPane.setSelectedIndex(4);
-    }
-    
-    private void refresh(){
-        //Declare and instantiate Timer       
-        Timer t = new Timer(0, (ActionEvent e) -> {
-            Logger.getLogger(GUI.class.getName()).log(Level.INFO, "Refreshing Orders...");
-            //Ordermanager refreshes the lists
-            om.findPlacedOrders();
-            om.findAcceptedOrders();
-            //Summarypanel refresh the arrays and replace the table model
-            ordertab.doRefresh(om);
-        });
-        t.setDelay(TIMER_ORDER);
-        t.start();
-    }
+        //Methode om van buiten de gui klassen en tab in te stellen(werkt niet(Nullpointer exception bij aanroep methode))
+        public void setOrderTab(int i){
+            tabbedPane.setSelectedIndex(i);
+        }
+
+        public void setOrderDetailsTab(JPanel panel, Order o){
+            //tabbedPane.setSelectedIndex(2);
+            orderdetailstab.setOrder(o);
+        }
 
 
-//    class BestellingenPanel extends JPanel {
-//        
-//        JPanel Bestellingentab = new JPanel();
-//        private JTextArea orderArea;
-//        
-//        public BestellingenPanel() {
-//            
-//            orderArea = new JTextArea();
-//            orderArea.setSize(100,100);
-//            
-//        }
-//
-//        private JTextArea orderArea;
-//
-//        public BestellingenPanel() {
-//            StringBuilder builder = new StringBuilder();
-//            
-//            orderArea = new JTextArea();
-//            
-//            builder.append("Geplaatste bestellingen:\n________________________________\n");
-//            
-//            for (Order order : orderManager.getPlacedOrders()) {
-//                builder.append("Id: " + order.getId() + " Datum: " + order.getDate().toString() + " Status: geplaatst\n");
-//                for (Dish dish : order.getDishList()) {
-//                    builder.append("   Gerecht " + dish.getId() + ": " + dish.getDishName() + "\n");
-//                }
-//            }
-//            
-//            orderArea.setText(builder.toString());
-//            
-//            add(orderArea);
-//        }
-//    }
-}
+        private void refresh(){
+            //Declareer een instantie van de Timer methode    
+            Timer t = new Timer(0, (ActionEvent e) -> {
+                Logger.getLogger(GUI.class.getName()).log(Level.INFO, "Refreshing Orders...");
+                //Ordermanager refresht de lijst
+                om.findPlacedOrders();
+                om.findAcceptedOrders();
+
+                ordertab.doRefresh(om);
+            });
+            t.setDelay(TIMER_ORDER);
+            t.start();
+        }
+    }
 

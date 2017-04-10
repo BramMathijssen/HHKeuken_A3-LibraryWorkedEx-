@@ -21,7 +21,7 @@ public class OrderTab extends JPanel {
     //Attributen
     private JTable tableAccepted, tablePlaced;
     private String[][] aOrders, pOrders;
-    private JButton acceptOrderButton,showOrderDetailsButton;
+    private JButton showOrderDetailsButton;
     private OrderManager om;
     private OrderTab ordertab;
     private Order order;
@@ -40,31 +40,10 @@ public class OrderTab extends JPanel {
     public OrderTab(GUI gui, OrderManager om, DishManager dm) {
         super(new BorderLayout());
         
-
-        
-        //Methoden om de data in de tabel te laden
-        
-        
+        //Methodes om de data in de tabel te laden
         fillAccepted(om);
         fillPlaced(om);
         
-   
-        //testdata om nullpointer error te voorkomen
-//        String[] columnNames = {"OrderID", "TafelID", "Aantal gerechten" };
-//        
-//        Object[][] data = {
-//            {"1", "6", "4" },
-//            {"2", "3" , "8"},
-//            {"3", "1" , "1"},
-//        };
-//        
-//        Object[][] data2 = {
-//            {"4", "2", "2" },
-//            {"5", "7" , "3"},
-//            {"6", "8" , "1"},
-//        };
-       
-
         //De tabel van geplaatste orders
         tableAccepted = new JTable(new NoEditTableModel(aOrders, COL_NAMES));
         tableAccepted.setDragEnabled(false);
@@ -120,17 +99,15 @@ public class OrderTab extends JPanel {
         acceptedHalf.setMaximumSize(MAX_DIM);
         acceptedHalf.setMinimumSize(MIN_DIM);
         
-        //Paneel voor de accepteer knop
+        //Paneel voor de knop
         JPanel buttonHalf = new JPanel();
         buttonHalf.setLayout(new BoxLayout(buttonHalf, BoxLayout.LINE_AXIS));
         JPanel buttonContainer = new JPanel(new GridLayout(1,1));
         buttonContainer.setBorder(BorderFactory.createTitledBorder(""));
         
-        acceptOrderButton = new JButton("Accepteer bestelling");
-        acceptOrderButton.setEnabled(false);
+
         showOrderDetailsButton = new JButton("Inhoud bestelling bekijken");
         showOrderDetailsButton.setEnabled(false);
-        buttonContainer.add(acceptOrderButton);
         buttonContainer.add(showOrderDetailsButton);
         
         buttonHalf.setBorder(BORDER);
@@ -148,68 +125,6 @@ public class OrderTab extends JPanel {
         splitPane.setDividerSize(0);
         
         
-        //ActionListners
-//        acceptOrderButton.addActionListener((ActionEvent event) -> {
-//            tablePlaced.isRowSelected(tablePlaced.getSelectedRow());
-//                String placedID = (String) tablePlaced.getValueAt(tablePlaced.getSelectedRow(), 1);
-//                 om.acceptOrder(order, placedID);  
-//                      
-//        });
-
-//        acceptOrderButton.addActionListener((ActionEvent event) -> {
-//            om.AcceptOrder2(order);
-//                      
-//        });
-        
-
-
-        acceptOrderButton.addActionListener((ActionEvent event) -> {
-            if(tablePlaced.isRowSelected(tablePlaced.getSelectedRow())){
-                String orderId = (String) tablePlaced.getValueAt(tablePlaced.getSelectedRow(), 0);
-                for(Order o : om.getPlacedOrders()){
-                    if(Integer.toString(o.getOrderId()).equals(orderId)){
-                        om.acceptOrder(o);
-
-                    }
-                }
-            }   
-        });
-        
-        tablePlaced.getSelectionModel().addListSelectionListener(evt -> {
-            acceptOrderButton.setEnabled(true);
-            tableAccepted.getSelectionModel().clearSelection();
-        });
-          
-//        acceptOrderButton.addActionListener((ActionEvent evt) -> {
-//            om.acceptOrder(order);            
-//        });
-        
-        //ActionListner
-//        acceptOrderButton.addActionListener((ActionEvent evt) -> {
-//           om.acceptOrder(order);
-//        });
-        
-//        tablePlaced.getSelectionModel().addListSelectionListener(evt -> {
-//            showOrderDetailsButton.setEnabled(true);
-//            tableAccepted.getSelectionModel().clearSelection();
-//        });
-//        
-//        tableAccepted.getSelectionModel().addListSelectionListener(evt -> {
-//            showOrderDetailsButton.setEnabled(true);
-//            tablePlaced.getSelectionModel().clearSelection();
-//        });   
-
-//        //Actionlisteners NUMMER 2 kan verwijderd worden
-//        showOrderDetailsButton.addActionListener((ActionEvent event) -> {
-//            if(tableAccepted.isRowSelected(tableAccepted.getSelectedRow())){
-//                String acceptedID = (String) tableAccepted.getValueAt(tableAccepted.getSelectedRow(), 1);
-//                showAcceptedOrder(om, dm, gui, acceptedID);
-//            } else {
-//                String placedID = (String) tablePlaced.getValueAt(tablePlaced.getSelectedRow(), 1);
-//                showPlacedOrder(om, dm, gui, placedID);
-//            }            
-//        });
-
         //Actionlisteners
         showOrderDetailsButton.addActionListener((ActionEvent event) -> {
             if(tableAccepted.isRowSelected(tableAccepted.getSelectedRow())){
@@ -222,9 +137,6 @@ public class OrderTab extends JPanel {
         });
         
         
-        
- 
-        
         tablePlaced.getSelectionModel().addListSelectionListener(evt -> {
             showOrderDetailsButton.setEnabled(true);
             tableAccepted.getSelectionModel().clearSelection();
@@ -234,26 +146,23 @@ public class OrderTab extends JPanel {
             showOrderDetailsButton.setEnabled(true);
             tablePlaced.getSelectionModel().clearSelection();
         });     
-        
-    
     }
     
         
         //Methods
-    
-        public void refresh(){
-        //Declare and instantiate Timer       
+        public void refresh(){      
         Timer t = new Timer(0, (ActionEvent e) -> {
             Logger.getLogger(GUI.class.getName()).log(Level.INFO, "Refreshing Orders...");
-            //Ordermanager refreshes the lists
+            //De ordermanager refresht de lijst
             om.findPlacedOrders();
             om.findAcceptedOrders();
-            //Summarypanel refresh the arrays and replace the table model
+
             ordertab.doRefresh(om);
         });
         t.setDelay(TIMER_ORDER);
         t.start();
     }
+        
         public void doRefresh(OrderManager om){
             fillAccepted(om);
             fillPlaced(om);
@@ -319,8 +228,6 @@ public class OrderTab extends JPanel {
                 }
             }
         }
-                    
-                   
 
         public String toMinutes(int sec){
             int min = sec * 1000;

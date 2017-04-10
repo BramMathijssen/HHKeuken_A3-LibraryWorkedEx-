@@ -10,21 +10,18 @@ public class Dish {
     //Attributen
     private String dishName;
     private int dishId, amount, employeeId, cookingTime;
-    private final List<Ingredient> ingredients;
     
-    //Default constructor om de ArrayList van ingredients te initializeren
+    //Default constructor
     public Dish(){
-        ingredients = new ArrayList<>();
     }
 
     //Misschien fout in de constructor List<Ingredient>
-    public Dish(String dishName, int dishId, int amount, int employeeId, int cookingTime, List<Ingredient> ingredients) {
+    public Dish(String dishName, int dishId, int amount, int employeeId, int cookingTime) {
         this.dishName = dishName;
         this.dishId = dishId;
         this.amount = amount;
         this.employeeId = employeeId;
         this.cookingTime = cookingTime;
-        this.ingredients = ingredients;
     }
     
     //Getters
@@ -48,9 +45,6 @@ public class Dish {
         return cookingTime;
     }
 
-    public List<Ingredient> getIngredients() {
-        return ingredients;
-    }
 
     //Setters
     public void setDishName(String dishName) {
@@ -71,16 +65,5 @@ public class Dish {
 
     public void setCookingTime(int cookingTime) {
         this.cookingTime = cookingTime;
-    }
-    
-    //Methode
-    public void addIngredient(Ingredient ingredient){
-        ingredients.add(ingredient);
-    }
-    
-    
-    
-    
-    
-    
+    }  
 }

@@ -11,7 +11,8 @@ public class LoginManager {
     public LoginManager() {
         loggedIn = false;
     }
-    //Method
+    
+    //Methode
     public boolean checkPassword(String username, String password){
         String hashedPasswordFromDB = (new LoginDAO()).
             getHashedPasswordForUsername(username);                

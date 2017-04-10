@@ -9,10 +9,9 @@ import edu.avans.kitchen.businesslogic.OrderManager;
 public class Main {
     
     private static final OrderManager OM = new OrderManager();
-    //private static final EmployeeManager PM = new EmployeeManager();
     private static final DishManager DM = new DishManager();
     
-        //Private constructor
+    //Private constructor
     private Main(){
         
     }
