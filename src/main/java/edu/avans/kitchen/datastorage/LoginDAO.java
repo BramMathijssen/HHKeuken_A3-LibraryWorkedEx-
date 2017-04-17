@@ -22,7 +22,7 @@ public class LoginDAO {
         this.con = dbc.getConnection();
     }
 
-    public String getHashedPasswordForUsername(String username) {
+    public String getPasswordForUsername(String username) {
         ResultSet resultset;
         String s = null;
         try {

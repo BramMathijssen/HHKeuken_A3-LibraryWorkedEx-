@@ -176,11 +176,11 @@ public class OrderDetailsTab extends JPanel {
     }
     
     public void loopDishes(){
-        dishDetails = new String[order.getMeals().size()][D_COL_LENGTH];
-        planningDetails = new String[order.getMeals().size()][P_COL_LENGTH];
+        dishDetails = new String[order.getDishes().size()][D_COL_LENGTH];
+        planningDetails = new String[order.getDishes().size()][P_COL_LENGTH];
         int i = 0;
         endTime = calculateEndTime();
-        for(Dish dish : order.getMeals()){
+        for(Dish dish : order.getDishes()){
             //Fill mealDetails
             dishDetails[i][0] = dish.getDishName();
             dishDetails[i][1] = Integer.toString(dish.getAmount());
@@ -229,7 +229,7 @@ public class OrderDetailsTab extends JPanel {
     
     public String calculateEndTime(){
         longestTime = 0;
-        for(Dish dish : order.getMeals()){
+        for(Dish dish : order.getDishes()){
             if(dish.getCookingTime() > longestTime){
                 longestTime = dish.getCookingTime();
             }

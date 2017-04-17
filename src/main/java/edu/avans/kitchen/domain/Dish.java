@@ -15,7 +15,6 @@ public class Dish {
     public Dish(){
     }
 
-    //Misschien fout in de constructor List<Ingredient>
     public Dish(String dishName, int dishId, int amount, int employeeId, int cookingTime) {
         this.dishName = dishName;
         this.dishId = dishId;

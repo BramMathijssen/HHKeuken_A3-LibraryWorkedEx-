@@ -14,9 +14,9 @@ public class LoginManager {
     
     //Methode
     public boolean checkPassword(String username, String password){
-        String hashedPasswordFromDB = (new LoginDAO()).
-            getHashedPasswordForUsername(username);                
-        if (hashedPasswordFromDB == null ){
+        String PasswordFromDB = (new LoginDAO()).
+            getPasswordForUsername(username);                
+        if (PasswordFromDB == null ){
             return false;
         }        
         return true;

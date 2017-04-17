@@ -42,7 +42,7 @@ public class Order {
         return maxCookingTime;
     }
     
-    public List<Dish> getMeals(){
+    public List<Dish> getDishes(){
         return dishes;
     }
     
@@ -67,7 +67,6 @@ public class Order {
         this.orderId = orderId;
     }
     
-
     
     public boolean setStatus(Status status) {
         boolean b = false;
